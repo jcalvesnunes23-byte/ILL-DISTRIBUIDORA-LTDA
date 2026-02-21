@@ -11,6 +11,7 @@ interface AdminDashboardProps {
   orders: Order[];
   onAddProduct: (product: Omit<Product, 'id'>) => void;
   onEditProduct: (product: Product) => void;
+  onDeleteProduct: (productId: string) => void;
   onAddCategory: (category: string) => Promise<void>;
   onEditCategory: (oldName: string, newName: string) => void;
   onDeleteCategory: (category: string) => void;
@@ -25,6 +26,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
   orders,
   onAddProduct,
   onEditProduct,
+  onDeleteProduct,
   onAddCategory,
   onEditCategory,
   onDeleteCategory,
@@ -294,10 +296,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
             <span className={`material-symbols-outlined text-2xl group-hover:scale-110 transition-transform ${activeTab === 'ORDERS' ? 'text-primary fill-1' : ''}`}>shopping_bag</span>
             <span className={`font-bold tracking-wide ${activeTab === 'ORDERS' ? '' : 'font-semibold'}`}>Pedidos</span>
           </button>
-          <button className="w-full flex items-center gap-4 px-5 py-4 text-slate-400 hover:text-white hover:bg-white/5 transition-all rounded-2xl group">
-            <span className="material-symbols-outlined text-2xl group-hover:scale-110 transition-transform">dashboard</span>
-            <span className="font-semibold tracking-wide">Dashboard</span>
-          </button>
+
         </nav>
 
         <div className="p-6 mt-auto">
@@ -398,18 +397,29 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
                           </div>
                           <div className="flex items-center justify-between mt-4 pt-4 border-t border-slate-50">
                             <span className="font-black text-slate-900 text-lg">R$ {product.price.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
-                            <button
-                              onClick={() => {
-                                setEditingProduct(product);
-                                setEditProductName(product.name);
-                                setEditProductPrice(product.price.toString());
-                                setEditProductImage(product.image);
-                                setEditProductFlavors(product.flavors.join(', '));
-                                setEditProductDescription(product.description);
-                              }}
-                              className="size-8 rounded-lg bg-slate-50 text-slate-400 flex items-center justify-center hover:bg-primary hover:text-white transition-colors">
-                              <span className="material-symbols-outlined text-lg">edit</span>
-                            </button>
+                            <div className="flex items-center gap-2">
+                              <button
+                                onClick={() => {
+                                  setEditingProduct(product);
+                                  setEditProductName(product.name);
+                                  setEditProductPrice(product.price.toString());
+                                  setEditProductImage(product.image);
+                                  setEditProductFlavors(product.flavors.join(', '));
+                                  setEditProductDescription(product.description);
+                                }}
+                                className="size-8 rounded-lg bg-slate-50 text-slate-400 flex items-center justify-center hover:bg-primary hover:text-white transition-colors">
+                                <span className="material-symbols-outlined text-lg">edit</span>
+                              </button>
+                              <button
+                                onClick={() => {
+                                  if (window.confirm(`Tem certeza que deseja excluir o produto "${product.name}"?`)) {
+                                    onDeleteProduct(product.id);
+                                  }
+                                }}
+                                className="size-8 rounded-lg bg-red-50 text-red-400 flex items-center justify-center hover:bg-red-500 hover:text-white transition-colors">
+                                <span className="material-symbols-outlined text-lg">delete</span>
+                              </button>
+                            </div>
                           </div>
                         </div>
                       ))
@@ -437,25 +447,25 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 orders.filter(o => o.status !== 'Entregue').map(order => (
                   <div key={order.id} className="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden flex flex-col md:flex-row">
                     <div className="p-8 flex-1 flex flex-col">
-                      <div className="flex items-start justify-between mb-6">
-                        <div className="flex items-center gap-4">
+                      <div className="flex items-center justify-between mb-4 md:mb-6">
+                        <div className="flex items-center gap-3 md:gap-4">
                           <img
                             src={order.user?.avatar || 'https://picsum.photos/seed/client/100/100'}
                             alt={order.user?.companyName || 'Cliente'}
-                            className="size-16 rounded-2xl object-cover border-2 border-slate-100"
+                            className="size-12 md:size-16 rounded-xl md:rounded-2xl object-cover border-2 border-slate-100"
                           />
                           <div>
-                            <h3 className="text-xl font-black text-slate-900 uppercase tracking-tight">{order.user?.companyName || order.user?.name || 'Cliente Desconhecido'}</h3>
-                            <div className="flex items-center gap-3 mt-1">
-                              <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">#{order.id.slice(-6).toUpperCase()}</span>
-                              <span className="size-1 bg-slate-300 rounded-full"></span>
-                              <span className="text-xs font-bold text-blue-600 uppercase tracking-wider">
-                                {new Date(order.created_at).toLocaleString('pt-BR')}
+                            <h3 className="text-base md:text-xl font-black text-slate-900 uppercase tracking-tight leading-tight">{order.user?.companyName || order.user?.name || 'Cliente Desconhecido'}</h3>
+                            <div className="flex flex-wrap items-center gap-2 md:gap-3 mt-0.5 md:mt-1">
+                              <span className="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest">#{order.id.slice(-6).toUpperCase()}</span>
+                              <span className="hidden md:inline size-1 bg-slate-300 rounded-full"></span>
+                              <span className="text-[10px] md:text-xs font-bold text-blue-600 tracking-wider">
+                                {new Date(order.created_at).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' }).replace(',', '')}
                               </span>
                             </div>
                           </div>
                         </div>
-                        <span className="bg-amber-100 text-amber-700 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest">
+                        <span className="bg-[#FFF4D2] text-[#B45309] px-3 py-1.5 md:px-4 md:py-2 rounded-full md:rounded-xl text-[10px] md:text-xs font-black uppercase tracking-widest self-start">
                           {order.status}
                         </span>
                       </div>

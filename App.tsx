@@ -314,6 +314,19 @@ const App: React.FC = () => {
     }
   };
 
+  const handleDeleteProduct = async (productId: string) => {
+    const { error } = await supabase
+      .from('products')
+      .delete()
+      .eq('id', productId);
+
+    if (error) {
+      alert('Erro ao excluir produto: ' + error.message);
+    } else {
+      setProducts(products.filter(p => p.id !== productId));
+    }
+  };
+
   const handleAddCategory = async (name: string) => {
     try {
       const { error } = await supabase.from('categories').insert([{ name }]);
@@ -516,6 +529,7 @@ const App: React.FC = () => {
           orders={orders}
           onAddProduct={handleAddProduct}
           onEditProduct={handleEditProduct}
+          onDeleteProduct={handleDeleteProduct}
           onAddCategory={handleAddCategory}
           onEditCategory={handleEditCategory}
           onDeleteCategory={handleDeleteCategory}
