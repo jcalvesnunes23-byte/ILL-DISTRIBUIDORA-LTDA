@@ -45,7 +45,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, user, onAddToCar
                 <span className="text-primary">{product.category}</span>
               </nav>
 
-              <h2 className="text-accent-gold font-bold tracking-[0.3em] text-sm uppercase mb-4">Experiência Platinum</h2>
+              <h2 className="text-accent-gold font-bold tracking-[0.3em] text-sm uppercase mb-4">Sabor Irresistível</h2>
               <h1 className="text-4xl md:text-5xl font-black text-dark-charcoal tracking-tight uppercase mb-6">{product.name}</h1>
 
               <p className="text-neutral-500 leading-relaxed text-lg mb-8 max-w-lg">
