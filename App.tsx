@@ -99,7 +99,11 @@ const App: React.FC = () => {
           name: initialUser.name,
           company_name: initialUser.companyName,
           email: initialUser.email,
-          role: initialUser.role
+          role: initialUser.role,
+          cnpj: initialUser.cnpj,
+          phone: initialUser.phone,
+          business_category: initialUser.businessCategory,
+          address: initialUser.address
         }])
         .select()
         .single();
