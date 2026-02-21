@@ -139,7 +139,7 @@ const Catalog: React.FC<CatalogProps> = ({
                     </h1>
                     <button
                         onClick={scrollToCatalog}
-                        className="border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-6 md:px-12 py-3 md:py-5 rounded-lg font-bold text-sm md:text-lg transition-all uppercase tracking-wider shadow-lg active:scale-95"
+                        className="bg-blue-600 text-white hover:bg-blue-700 px-6 md:px-12 py-3 md:py-5 rounded-lg font-bold text-sm md:text-lg transition-all uppercase tracking-wider shadow-lg active:scale-95"
                     >
                         Ver Catálogo
                     </button>
