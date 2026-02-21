@@ -150,10 +150,10 @@ const Catalog: React.FC<CatalogProps> = ({
             <section ref={catalogRef} className="py-12 md:py-24 px-4 md:px-6 max-w-7xl mx-auto">
                 <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
                     <div>
-                        <h2 className="text-amber-600 font-bold tracking-widest text-sm uppercase mb-3">Sua Próxima Experiência</h2>
-                        <h3 className="text-4xl font-bold text-slate-900 tracking-tight">Coleção Exclusive</h3>
+                        <h2 className="text-amber-600 font-bold tracking-widest text-sm uppercase mb-3">Qualidade & Tradição</h2>
+                        <h3 className="text-4xl font-bold text-slate-900 tracking-tight">Iogurtes da <span className="text-blue-600">Tatá</span></h3>
                     </div>
-                    <p className="text-slate-500 max-w-md">Uma curadoria rigorosa de serviços e produtos desenhados para os padrões mais exigentes da ILL & DISTRIBUIDORA LTDA.</p>
+                    <p className="text-slate-500 max-w-md">O verdadeiro sabor do campo na sua mesa. Conheça a linha completa de iogurtes e produtos ILL & DISTRIBUIDORA.</p>
                 </div>
 
                 <div className="mb-16 max-w-2xl mx-auto relative group ai-glow-container">
