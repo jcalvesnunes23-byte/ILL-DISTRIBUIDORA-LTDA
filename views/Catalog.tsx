@@ -1,0 +1,260 @@
+import React from 'react';
+import { Product, User, CartItem } from '../types';
+
+interface CatalogProps {
+    user: User | null;
+    products: Product[];
+    categories: string[];
+    cartCount: number;
+    onGoToCart: () => void;
+    onLogin: () => void;
+    onRegister: () => void;
+    onGoToProfile: () => void;
+    onProductClick: (product: Product) => void;
+    onGoToAdminLogin: () => void;
+    onAddToCart: (item: CartItem) => void;
+}
+
+const Catalog: React.FC<CatalogProps> = ({
+    user,
+    products,
+    categories,
+    cartCount,
+    onGoToCart,
+    onLogin,
+    onRegister,
+    onGoToProfile,
+    onProductClick,
+    onGoToAdminLogin,
+    onAddToCart
+}) => {
+    const [configProductId, setConfigProductId] = React.useState<string | null>(null);
+    const [selectedFlavor, setSelectedFlavor] = React.useState('');
+    const [qty, setQty] = React.useState(1);
+    const [crates, setCrates] = React.useState(0);
+
+    const handleStartConfig = (e: React.MouseEvent, product: Product) => {
+        e.stopPropagation();
+        if (!user) {
+            if (confirm('Você precisa estar logado para adicionar produtos ao carrinho. Deseja fazer login agora?')) {
+                onLogin();
+            }
+            return;
+        }
+        setConfigProductId(product.id);
+        setSelectedFlavor(product.flavors?.[0] || '');
+        setQty(1);
+    };
+
+    const handleConfirmAdd = (e: React.MouseEvent, product: Product) => {
+        e.stopPropagation();
+        onAddToCart({
+            product,
+            quantity: qty,
+            selectedFlavor
+        });
+        setConfigProductId(null);
+    };
+
+    return (
+        <div className="min-h-screen bg-white">
+            {/* Header Bar */}
+            <header className="fixed top-0 w-full z-50 bg-blue-600 shadow-lg h-20 flex items-center px-6">
+                <div className="max-w-7xl mx-auto w-full flex justify-between items-center">
+                    <div className="flex items-center gap-3 text-white">
+                        <svg className="size-8" fill="currentColor" viewBox="0 0 48 48">
+                            <path d="M24 4H42V17.3333V30.6667H24V44H6V30.6667V17.3333H24V4Z" />
+                        </svg>
+                        <h1 className="text-xl md:text-2xl font-extrabold tracking-tighter uppercase whitespace-nowrap">ILL & DISTRIBUIDORA LTDA</h1>
+                    </div>
+                    <div className="flex items-center gap-4">
+                        {!user ? (
+                            <>
+                                <button onClick={() => onRegister()} className="bg-white text-blue-600 hover:bg-white/90 px-4 md:px-6 py-2.5 text-[10px] md:text-xs font-bold tracking-widest uppercase transition-colors">
+                                    CADASTRE SUA EMPRESA
+                                </button>
+                                <button onClick={() => onLogin()} className="border border-white text-white hover:bg-white/10 px-4 md:px-8 py-2.5 text-[10px] md:text-xs font-bold tracking-widest uppercase transition-colors">
+                                    ENTRAR
+                                </button>
+                            </>
+                        ) : (
+                            <button
+                                onClick={onGoToProfile}
+                                className="flex items-center gap-3 group"
+                            >
+                                <div className="w-10 h-10 rounded-full border-2 border-white/20 overflow-hidden group-hover:scale-105 transition-transform">
+                                    <img
+                                        src={user.avatar || 'https://via.placeholder.com/40'}
+                                        alt="Profile"
+                                        className="w-full h-full object-cover"
+                                    />
+                                </div>
+                                <span className="text-white text-sm font-medium hidden md:block">
+                                    {user.companyName || user.name || 'Empresa Cadastrada'}
+                                </span>
+                            </button>
+                        )}
+                    </div>
+                </div>
+            </header>
+
+            {/* Hero Section */}
+            <section className="relative h-[85vh] pt-20 flex items-center justify-center overflow-hidden">
+                <div className="absolute inset-0 z-0">
+                    <img
+                        alt="ILL & Distribuidora Hero"
+                        className="w-full h-full object-cover"
+                        src="/principal.png"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/40 to-white/90"></div>
+                </div>
+                <div className="relative z-20 text-center max-w-5xl px-6">
+                    <span className="text-amber-600 font-bold tracking-[0.4em] uppercase text-xs md:text-sm mb-6 block">Performance & Exclusividade</span>
+                    <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-slate-900 leading-[1.1] mb-12 tracking-tight uppercase">
+                        FAÇA O SEU <br />PEDIDO DA <span className="text-blue-600 font-black">ILL & <br />DISTRIBUIDORA</span>
+                    </h1>
+                    <button className="border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-12 py-5 rounded-lg font-bold text-lg transition-all uppercase tracking-wider shadow-lg">
+                        Ver Catálogo
+                    </button>
+                </div>
+            </section>
+
+            {/* Product Section */}
+            <section className="py-24 px-6 max-w-7xl mx-auto">
+                <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+                    <div>
+                        <h2 className="text-amber-600 font-bold tracking-widest text-sm uppercase mb-3">Sua Próxima Experiência</h2>
+                        <h3 className="text-4xl font-bold text-slate-900 tracking-tight">Coleção Exclusive</h3>
+                    </div>
+                    <p className="text-slate-500 max-w-md">Uma curadoria rigorosa de serviços e produtos desenhados para os padrões mais exigentes da ILL & DISTRIBUIDORA LTDA.</p>
+                </div>
+
+                <div className="mb-16 max-w-2xl mx-auto relative group ai-glow-container">
+                    <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-600 transition-colors z-10">search</span>
+                    <input
+                        className="w-full pl-12 pr-6 py-4 bg-transparent border-none outline-none transition-all font-light tracking-wide text-slate-700"
+                        placeholder="O que você está procurando?"
+                    />
+                </div>
+
+                {/* Product Sections by Category */}
+                <div className="space-y-24">
+                    {categories.map(category => {
+                        const categoryProducts = products.filter(p => p.category === category);
+                        if (categoryProducts.length === 0) return null;
+
+                        return (
+                            <section key={category}>
+                                <div className="flex items-center gap-4 mb-12">
+                                    <div className="h-px bg-slate-200 flex-1"></div>
+                                    <h3 className="text-3xl md:text-4xl font-black text-slate-900 uppercase tracking-tighter text-center px-4">
+                                        {category}
+                                    </h3>
+                                    <div className="h-px bg-slate-200 flex-1"></div>
+                                </div>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
+                                    {categoryProducts.map((product) => (
+                                        <div
+                                            key={product.id}
+                                            onClick={() => onProductClick(product)}
+                                            className="group relative overflow-hidden rounded-3xl bg-white shadow-xl shadow-slate-200/50 cursor-pointer hover:-translate-y-2 transition-transform duration-500"
+                                        >
+                                            <div className="aspect-[3/4] overflow-hidden relative">
+                                                <img
+                                                    alt={product.name}
+                                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                                    src={product.image}
+                                                />
+                                                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity"></div>
+
+
+                                            </div>
+
+                                            <div className="absolute bottom-0 inset-x-0 p-8 text-white">
+                                                <h4 className="text-2xl font-black uppercase tracking-tight mb-2 group-hover:text-blue-400 transition-colors">{product.name}</h4>
+                                                <p className="text-lg font-bold">
+                                                    R$ {product.price.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                                                </p>
+
+                                                {product.flavors && product.flavors.length > 0 && (
+                                                    <div className="flex flex-wrap gap-1.5 mt-3">
+                                                        {product.flavors.slice(0, 3).map((flavor, index) => (
+                                                            <span key={index} className="px-2 py-0.5 bg-white/20 backdrop-blur-md text-[9px] font-bold uppercase tracking-wider rounded-md border border-white/10">
+                                                                {flavor}
+                                                            </span>
+                                                        ))}
+                                                        {product.flavors.length > 3 && (
+                                                            <span className="text-[9px] font-bold opacity-60">+{product.flavors.length - 3}</span>
+                                                        )}
+                                                    </div>
+                                                )}
+
+                                                {configProductId === product.id ? (
+                                                    <div className="mt-4 space-y-4 bg-slate-900/60 backdrop-blur-md p-4 rounded-2xl border border-white/10" onClick={e => e.stopPropagation()}>
+                                                        {product.flavors && product.flavors.length > 0 && (
+                                                            <div className="space-y-2">
+                                                                <label className="text-[10px] font-bold uppercase tracking-wider opacity-60">Sabor</label>
+                                                                <div className="flex flex-wrap gap-1">
+                                                                    {product.flavors.map(f => (
+                                                                        <button
+                                                                            key={f}
+                                                                            onClick={() => setSelectedFlavor(f)}
+                                                                            className={`px-2 py-1 rounded text-[9px] font-bold transition-all ${selectedFlavor === f ? 'bg-blue-600 text-white' : 'bg-white/10 text-white hover:bg-white/20'}`}
+                                                                        >
+                                                                            {f}
+                                                                        </button>
+                                                                    ))}
+                                                                </div>
+                                                            </div>
+                                                        )}
+                                                        <div className="flex gap-4">
+                                                            <div className="w-full space-y-2">
+                                                                <label className="text-[10px] font-bold uppercase tracking-wider opacity-60">Qtd</label>
+                                                                <div className="flex items-center bg-white/10 rounded-lg overflow-hidden border border-white/10">
+                                                                    <button onClick={() => setQty(q => Math.max(1, q - 1))} className="p-2 hover:bg-white/10"><span className="material-symbols-outlined text-xs">remove</span></button>
+                                                                    <span className="flex-1 text-center text-xs font-bold">{qty}</span>
+                                                                    <button onClick={() => setQty(q => q + 1)} className="p-2 hover:bg-white/10"><span className="material-symbols-outlined text-xs">add</span></button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <button
+                                                            onClick={(e) => handleConfirmAdd(e, product)}
+                                                            className="w-full bg-blue-600 text-white py-2 rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-blue-700 transition-all font-bold"
+                                                        >
+                                                            Confirmar Pedido
+                                                        </button>
+                                                    </div>
+                                                ) : (
+                                                    <div className="mt-6 flex items-center justify-between opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 delay-100">
+                                                        <button
+                                                            onClick={(e) => handleStartConfig(e, product)}
+                                                            className="px-4 py-2 bg-blue-600 text-white rounded-full text-[10px] font-bold uppercase tracking-widest shadow-lg shadow-blue-600/20 hover:scale-105 transition-transform"
+                                                        >
+                                                            Adicionar
+                                                        </button>
+                                                        <div className="size-10 rounded-full bg-white text-slate-900 flex items-center justify-center">
+                                                            <span className="material-symbols-outlined">arrow_forward</span>
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </section>
+                        );
+                    })}
+                </div>
+            </section>
+
+
+            <footer className="bg-blue-600 py-10 text-white text-center">
+                <p className="opacity-80 text-sm font-medium">© 2024 ILL & DISTRIBUIDORA LTDA. Todos os direitos reservados.</p>
+                <button onClick={onGoToAdminLogin} className="text-[10px] opacity-60 uppercase tracking-widest hover:opacity-100 mt-2">Administração</button>
+            </footer>
+        </div>
+    );
+};
+
+export default Catalog;

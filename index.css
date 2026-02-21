@@ -1,0 +1,75 @@
+@keyframes rotate-glow {
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+@keyframes pulse-glow {
+
+    0%,
+    100% {
+        filter: blur(8px) opacity(0.8);
+    }
+
+    50% {
+        filter: blur(12px) opacity(1);
+    }
+}
+
+.ai-glow-container {
+    position: relative;
+    padding: 2px;
+    background: white;
+    border-radius: 9999px;
+    isolation: isolate;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.ai-glow-container::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300%;
+    /* Large enough to cover anything */
+    aspect-ratio: 1/1;
+    background: conic-gradient(from 0deg at 50% 50%,
+            #3B82F6 0deg,
+            transparent 45deg,
+            #60A5FA 90deg,
+            transparent 135deg,
+            #93C5FD 180deg,
+            transparent 225deg,
+            #3B82F6 270deg,
+            transparent 315deg);
+    transform: translate(-50%, -50%) rotate(0deg);
+    animation: rotate-glow 4s linear infinite;
+    z-index: -1;
+    filter: blur(20px);
+    opacity: 0.8;
+}
+
+.ai-glow-container::after {
+    content: '';
+    position: absolute;
+    inset: 2px;
+    background: white;
+    border-radius: 9999px;
+    z-index: -1;
+}
+
+/* Specific focus state to intensify effect */
+.ai-glow-container:focus-within {
+    padding: 3px;
+    box-shadow: 0 0 30px rgba(59, 130, 246, 0.2);
+}
+
+.ai-glow-container:focus-within::before {
+    animation: rotate-glow 2s linear infinite, pulse-glow 1s ease-in-out infinite;
+    filter: blur(10px);
+}
