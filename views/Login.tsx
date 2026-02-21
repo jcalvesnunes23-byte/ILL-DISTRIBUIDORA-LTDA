@@ -36,10 +36,10 @@ const Login: React.FC<LoginProps> = ({ onLogin, onRegister }) => {
         <div className="p-8 md:p-10">
           <div className="text-center mb-10">
             <div className="flex items-center justify-center gap-2 mb-4 text-primary">
-              <svg className="size-8" fill="currentColor" viewBox="0 0 48 48">
+              <svg className="size-6 md:size-8" fill="currentColor" viewBox="0 0 48 48">
                 <path d="M24 4H42V17.3333V30.6667H24V44H6V30.6667V17.3333H24V4Z" />
               </svg>
-              <h1 className="text-xl font-extrabold tracking-tighter uppercase whitespace-nowrap">ILL & DISTRIBUIDORA LTDA</h1>
+              <h1 className="text-lg md:text-xl font-extrabold tracking-tighter uppercase whitespace-nowrap">ILL & DISTRIBUIDORA</h1>
             </div>
             <h2 className="text-2xl font-bold text-slate-900">Acesso ao Catálogo</h2>
             <p className="text-slate-500 text-sm mt-2">Bem-vindo à ILL & DISTRIBUIDORA</p>

@@ -35,6 +35,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [activeTab, setActiveTab] = useState<'PRODUCTS' | 'ORDERS'>('PRODUCTS');
   const [showAddCategory, setShowAddCategory] = React.useState(false);
   const [newCategory, setNewCategory] = React.useState('');
+  const [sidebarOpen, setSidebarOpen] = React.useState(false);
 
   // State for adding product
   const [showAddProduct, setShowAddProduct] = React.useState<string | null>(null); // holds category name
@@ -252,9 +253,15 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
   return (
     <div className="flex min-h-screen bg-slate-50">
-      {/* Sidebar - Same as before */}
-      {/* Sidebar - Same as before */}
-      <aside className="w-72 bg-[#0F172A] text-white fixed inset-y-0 left-0 z-50 flex flex-col shadow-2xl">
+      {/* Mobile overlay */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+      {/* Sidebar */}
+      <aside className={`w-72 bg-[#0F172A] text-white fixed inset-y-0 left-0 z-50 flex flex-col shadow-2xl transition-transform duration-300 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`}>
         <div className="flex flex-col p-10 gap-6">
           <button
             onClick={onGoToCatalog}
@@ -305,25 +312,34 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 ml-72 flex flex-col h-screen overflow-hidden">
-        <header className="h-24 bg-white/80 backdrop-blur-md border-b border-slate-100 flex items-center justify-between px-12 shrink-0">
-          <h2 className="text-2xl font-black text-slate-900 tracking-tight">
-            {activeTab === 'PRODUCTS' ? 'Gerenciamento de Produtos' : 'Controle de Pedidos'}
-          </h2>
+      <main className="flex-1 lg:ml-72 flex flex-col h-screen overflow-hidden">
+        <header className="h-16 md:h-24 bg-white/80 backdrop-blur-md border-b border-slate-100 flex items-center justify-between px-4 md:px-12 shrink-0">
+          <div className="flex items-center gap-3">
+            {/* Mobile hamburger */}
+            <button
+              onClick={() => setSidebarOpen(true)}
+              className="lg:hidden p-2 rounded-xl text-slate-600 hover:bg-slate-100 transition-colors"
+            >
+              <span className="material-symbols-outlined">menu</span>
+            </button>
+            <h2 className="text-lg md:text-2xl font-black text-slate-900 tracking-tight">
+              {activeTab === 'PRODUCTS' ? 'Gerenciamento de Produtos' : 'Controle de Pedidos'}
+            </h2>
+          </div>
           <div className="flex items-center gap-4">
             {activeTab === 'PRODUCTS' && (
               <button
                 onClick={() => setShowAddCategory(true)}
-                className="bg-slate-900 text-white px-6 py-3 rounded-2xl font-bold text-xs uppercase tracking-widest hover:bg-slate-800 transition-all flex items-center gap-2"
+                className="bg-slate-900 text-white px-3 py-2 md:px-6 md:py-3 rounded-xl md:rounded-2xl font-bold text-[10px] md:text-xs uppercase tracking-widest hover:bg-slate-800 transition-all flex items-center justify-center gap-2"
               >
-                <span className="material-symbols-outlined text-base">view_column</span> Nova Categoria
+                <span className="material-symbols-outlined text-sm md:text-base">view_column</span> <span className="hidden sm:inline">Nova Categoria</span>
               </button>
             )}
           </div>
         </header>
 
         {/* Vertical Layout Area */}
-        <div className="flex-1 overflow-y-auto p-8 space-y-8">
+        <div className="flex-1 overflow-y-auto p-4 md:p-8 space-y-6 md:space-y-8">
           {activeTab === 'PRODUCTS' ? (
             <>
               {categories.map(category => (
@@ -477,7 +493,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       </div>
                     </div>
 
-                    <div className="w-full md:w-48 bg-slate-50 border-l border-slate-100 p-6 flex flex-col gap-3 justify-center">
+                    <div className="w-full md:w-48 bg-slate-50 border-t md:border-t-0 md:border-l border-slate-100 p-4 md:p-6 flex flex-row md:flex-col gap-3 justify-center">
                       <button
                         onClick={() => generateOrderPDF(order)}
                         className="w-full flex flex-col items-center justify-center gap-2 p-4 bg-white border border-slate-200 rounded-2xl hover:border-primary hover:text-primary transition-all group shadow-sm"

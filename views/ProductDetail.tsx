@@ -15,24 +15,24 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, user, onAddToCar
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
-      <header className="fixed top-0 w-full z-50 bg-primary h-20 flex items-center px-6 shadow-lg">
+      <header className="fixed top-0 w-full z-50 bg-primary h-14 md:h-20 flex items-center px-4 md:px-6 shadow-lg">
         <div className="max-w-7xl mx-auto w-full flex items-center justify-between text-white">
-          <button onClick={onBack} className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-            <span className="material-symbols-outlined">arrow_back</span>
-            <span className="text-sm font-bold uppercase tracking-widest">Voltar</span>
+          <button onClick={onBack} className="flex items-center gap-1 md:gap-2 hover:opacity-80 transition-opacity">
+            <span className="material-symbols-outlined text-sm md:text-base">arrow_back</span>
+            <span className="text-xs md:text-sm font-bold uppercase tracking-widest">Voltar</span>
           </button>
-          <div className="flex items-center gap-3">
-            <h1 className="text-xl font-extrabold tracking-tighter uppercase leading-none">ILL &<br />DISTRIBUIDORA</h1>
+          <div className="flex items-center gap-2">
+            <h1 className="text-sm md:text-xl font-extrabold tracking-tighter uppercase leading-none">ILL & DISTRIBUIDORA</h1>
           </div>
-          <div className="flex items-center gap-3">
-            <img alt="User" className="size-8 rounded-full border-2 border-white/20" src={user?.avatar || "https://picsum.photos/seed/user/100/100"} />
-            <span className="text-sm font-medium">{user?.companyName || user?.name || 'Empresa Cadastrada'}</span>
+          <div className="flex items-center gap-2">
+            <img alt="User" className="size-7 md:size-8 rounded-full border-2 border-white/20" src={user?.avatar || "https://picsum.photos/seed/user/100/100"} />
+            <span className="text-xs md:text-sm font-medium hidden sm:block">{user?.companyName || user?.name || 'Empresa Cadastrada'}</span>
           </div>
         </div>
       </header>
 
-      <main className="flex-grow pt-20">
-        <section className="max-w-7xl mx-auto px-6 py-12 md:py-24">
+      <main className="flex-grow pt-14 md:pt-20">
+        <section className="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-24">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20 items-start">
             <div className="aspect-[4/5] rounded-2xl overflow-hidden bg-neutral-100 shadow-xl">
               <img alt={product.name} className="w-full h-full object-cover" src={product.image} />

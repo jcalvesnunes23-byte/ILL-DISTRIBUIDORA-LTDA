@@ -59,30 +59,30 @@ const Catalog: React.FC<CatalogProps> = ({
     return (
         <div className="min-h-screen bg-white">
             {/* Header Bar */}
-            <header className="fixed top-0 w-full z-50 bg-blue-600 shadow-lg h-20 flex items-center px-6">
+            <header className="fixed top-0 w-full z-50 bg-blue-600 shadow-lg h-16 md:h-20 flex items-center px-4 md:px-6">
                 <div className="max-w-7xl mx-auto w-full flex justify-between items-center">
-                    <div className="flex items-center gap-3 text-white">
-                        <svg className="size-8" fill="currentColor" viewBox="0 0 48 48">
+                    <div className="flex items-center gap-2 md:gap-3 text-white min-w-0">
+                        <svg className="size-6 md:size-8 shrink-0" fill="currentColor" viewBox="0 0 48 48">
                             <path d="M24 4H42V17.3333V30.6667H24V44H6V30.6667V17.3333H24V4Z" />
                         </svg>
-                        <h1 className="text-xl md:text-2xl font-extrabold tracking-tighter uppercase whitespace-nowrap">ILL & DISTRIBUIDORA LTDA</h1>
+                        <h1 className="text-sm md:text-2xl font-extrabold tracking-tighter uppercase truncate">ILL & DISTRIBUIDORA LTDA</h1>
                     </div>
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-2 md:gap-4 shrink-0">
                         {!user ? (
                             <>
-                                <button onClick={() => onRegister()} className="bg-white text-blue-600 hover:bg-white/90 px-4 md:px-6 py-2.5 text-[10px] md:text-xs font-bold tracking-widest uppercase transition-colors">
+                                <button onClick={() => onRegister()} className="hidden sm:block bg-white text-blue-600 hover:bg-white/90 px-3 md:px-6 py-2 text-[9px] md:text-xs font-bold tracking-widest uppercase transition-colors">
                                     CADASTRE SUA EMPRESA
                                 </button>
-                                <button onClick={() => onLogin()} className="border border-white text-white hover:bg-white/10 px-4 md:px-8 py-2.5 text-[10px] md:text-xs font-bold tracking-widest uppercase transition-colors">
+                                <button onClick={() => onLogin()} className="border border-white text-white hover:bg-white/10 px-3 md:px-8 py-2 text-[9px] md:text-xs font-bold tracking-widest uppercase transition-colors">
                                     ENTRAR
                                 </button>
                             </>
                         ) : (
                             <button
                                 onClick={onGoToProfile}
-                                className="flex items-center gap-3 group"
+                                className="flex items-center gap-2 md:gap-3 group"
                             >
-                                <div className="w-10 h-10 rounded-full border-2 border-white/20 overflow-hidden group-hover:scale-105 transition-transform">
+                                <div className="w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-white/20 overflow-hidden group-hover:scale-105 transition-transform">
                                     <img
                                         src={user.avatar || 'https://via.placeholder.com/40'}
                                         alt="Profile"
@@ -99,7 +99,7 @@ const Catalog: React.FC<CatalogProps> = ({
             </header>
 
             {/* Hero Section */}
-            <section className="relative h-[85vh] pt-20 flex items-center justify-center overflow-hidden">
+            <section className="relative h-[60vh] md:h-[85vh] pt-16 md:pt-20 flex items-center justify-center overflow-hidden">
                 <div className="absolute inset-0 z-0">
                     <img
                         alt="ILL & Distribuidora Hero"
@@ -108,19 +108,19 @@ const Catalog: React.FC<CatalogProps> = ({
                     />
                     <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/40 to-white/90"></div>
                 </div>
-                <div className="relative z-20 text-center max-w-5xl px-6">
-                    <span className="text-amber-600 font-bold tracking-[0.4em] uppercase text-xs md:text-sm mb-6 block">Performance & Exclusividade</span>
-                    <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-slate-900 leading-[1.1] mb-12 tracking-tight uppercase">
-                        FAÇA O SEU <br />PEDIDO DA <span className="text-blue-600 font-black">ILL & <br />DISTRIBUIDORA</span>
+                <div className="relative z-20 text-center max-w-5xl px-4 md:px-6">
+
+                    <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-black text-slate-900 leading-[1.1] mb-6 md:mb-12 tracking-tight uppercase" style={{ textShadow: '1px 2px 6px rgba(0,0,0,0.18)' }}>
+                        FAÇA O SEU <br />PEDIDO DA <span className="text-blue-600 font-black" style={{ textShadow: '0 0 14px rgba(0,0,0,0.5), 0 0 30px rgba(0,0,0,0.25), 1px 2px 6px rgba(0,0,0,0.3)' }}>ILL & <br />DISTRIBUIDORA</span>
                     </h1>
-                    <button className="border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-12 py-5 rounded-lg font-bold text-lg transition-all uppercase tracking-wider shadow-lg">
+                    <button className="border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-6 md:px-12 py-3 md:py-5 rounded-lg font-bold text-sm md:text-lg transition-all uppercase tracking-wider shadow-lg">
                         Ver Catálogo
                     </button>
                 </div>
             </section>
 
             {/* Product Section */}
-            <section className="py-24 px-6 max-w-7xl mx-auto">
+            <section className="py-12 md:py-24 px-4 md:px-6 max-w-7xl mx-auto">
                 <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
                     <div>
                         <h2 className="text-amber-600 font-bold tracking-widest text-sm uppercase mb-3">Sua Próxima Experiência</h2>

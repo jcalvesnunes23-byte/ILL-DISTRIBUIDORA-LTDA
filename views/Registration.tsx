@@ -36,24 +36,24 @@ const Registration: React.FC<RegistrationProps> = ({ onBack, onRegister }) => {
 
   return (
     <div className="min-h-screen bg-background-light flex flex-col">
-      <header className="flex items-center justify-between bg-primary px-6 md:px-10 py-4 sticky top-0 z-50 shadow-sm text-white">
-        <button onClick={onBack} className="rounded-lg h-10 w-10 bg-white/10 hover:bg-white/20 flex items-center justify-center">
+      <header className="flex items-center justify-between bg-primary px-4 md:px-10 py-4 sticky top-0 z-50 shadow-sm text-white">
+        <button onClick={onBack} className="rounded-lg h-10 w-10 bg-white/10 hover:bg-white/20 flex items-center justify-center shrink-0">
           <span className="material-symbols-outlined">arrow_back</span>
         </button>
-        <div className="flex items-center gap-2">
-          <svg className="size-6" fill="currentColor" viewBox="0 0 48 48">
+        <div className="flex items-center justify-center gap-1 md:gap-2 flex-grow mx-2 min-w-0">
+          <svg className="size-5 md:size-6 shrink-0" fill="currentColor" viewBox="0 0 48 48">
             <path d="M24 4H42V17.3333V30.6667H24V44H6V30.6667V17.3333H24V4Z" />
           </svg>
-          <h1 className="text-xl font-extrabold tracking-tighter uppercase whitespace-nowrap">ILL & DISTRIBUIDORA LTDA</h1>
+          <h1 className="text-sm md:text-xl font-extrabold tracking-tighter uppercase truncate">ILL & DISTRIBUIDORA</h1>
         </div>
-        <div className="w-10"></div>
+        <div className="w-10 shrink-0"></div>
       </header>
 
-      <main className="flex-1 flex flex-col items-center justify-center px-4 py-12">
+      <main className="flex-1 flex flex-col items-center justify-center px-4 md:px-6 py-8 md:py-12">
         <div className="w-full max-w-[560px]">
-          <div className="mb-8 text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-slate-900 mb-2">Junte-se à Rede</h2>
-            <p className="text-slate-500 text-base">Cadastre sua empresa para acessar o catálogo B2B da ILL & DISTRIBUIDORA</p>
+          <div className="mb-6 md:mb-8 text-center">
+            <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900 mb-2">Junte-se à Rede</h2>
+            <p className="text-slate-500 text-sm md:text-base">Cadastre sua empresa para acessar o catálogo B2B da ILL & DISTRIBUIDORA</p>
           </div>
 
           <div className="bg-white rounded-xl shadow-xl border border-primary/10 p-8 md:p-10">

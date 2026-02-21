@@ -46,24 +46,24 @@ const Cart: React.FC<CartProps> = ({ items, user, onBack, onRemove, onCheckout }
   return (
     <div className="min-h-screen bg-background-light text-slate-900">
       <header className="sticky top-0 z-50 w-full bg-primary text-white shadow-md">
-        <div className="max-w-[1200px] mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-8">
+        <div className="max-w-[1200px] mx-auto px-4 md:px-6 h-14 md:h-16 flex items-center justify-between">
+          <div className="flex items-center gap-4">
             <button onClick={onBack} className="flex items-center gap-2">
               <span className="material-symbols-outlined font-bold">shopping_bag</span>
-              <h1 className="text-xl font-extrabold tracking-tighter uppercase leading-none">ILL &<br />DISTRIBUIDORA</h1>
+              <h1 className="text-base md:text-xl font-extrabold tracking-tighter uppercase leading-none">ILL & DISTRIBUIDORA</h1>
             </button>
           </div>
-          <div className="flex items-center gap-3">
-            <img alt="User" className="size-8 rounded-full border-2 border-white/20" src={user?.avatar || "https://picsum.photos/seed/user/100/100"} />
-            <span className="text-sm font-medium">{user?.companyName || user?.name || 'Empresa Cadastrada'}</span>
+          <div className="flex items-center gap-2 md:gap-3">
+            <img alt="User" className="size-7 md:size-8 rounded-full border-2 border-white/20" src={user?.avatar || "https://picsum.photos/seed/user/100/100"} />
+            <span className="text-xs md:text-sm font-medium hidden sm:block">{user?.companyName || user?.name || 'Empresa Cadastrada'}</span>
           </div>
         </div>
       </header>
 
-      <main className="max-w-[1200px] mx-auto px-6 py-12">
-        <h2 className="text-3xl font-extrabold mb-10 tracking-tight">Seu Carrinho</h2>
+      <main className="max-w-[1200px] mx-auto px-4 md:px-6 py-8 md:py-12">
+        <h2 className="text-2xl md:text-3xl font-extrabold mb-6 md:mb-10 tracking-tight">Seu Carrinho</h2>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-12 items-start">
           <div className="lg:col-span-2 space-y-10">
             {items.length === 0 ? (
               <div className="bg-white p-20 rounded-xl text-center shadow-sm border border-slate-100">
@@ -123,7 +123,7 @@ const Cart: React.FC<CartProps> = ({ items, user, onBack, onRemove, onCheckout }
             </section>
           </div>
 
-          <aside className="sticky top-24">
+          <aside className="lg:sticky lg:top-24">
             <div className="bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden p-8">
               <h3 className="text-xl font-extrabold mb-6 border-b pb-4">Resumo do Pedido</h3>
               <div className="space-y-4 mb-8">
