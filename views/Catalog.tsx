@@ -135,8 +135,8 @@ const Catalog: React.FC<CatalogProps> = ({
                 </div>
                 <div className="relative z-20 text-center max-w-5xl px-4 md:px-6">
 
-                    <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-black text-slate-900 leading-[1.1] mb-6 md:mb-12 tracking-tight uppercase" style={{ textShadow: '1px 2px 6px rgba(0,0,0,0.18)' }}>
-                        FAÇA O SEU <br />PEDIDO DA <span className="text-blue-600 font-black" style={{ textShadow: '0 0 14px rgba(0,0,0,0.5), 0 0 30px rgba(0,0,0,0.25), 1px 2px 6px rgba(0,0,0,0.3)' }}>ILL & <br />DISTRIBUIDORA</span>
+                    <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-black text-slate-900 leading-[1.1] mb-6 md:mb-12 tracking-tight uppercase">
+                        FAÇA O SEU <br />PEDIDO DA <span className="text-blue-600 font-black">ILL & <br />DISTRIBUIDORA</span>
                     </h1>
                     <button
                         onClick={scrollToCatalog}
