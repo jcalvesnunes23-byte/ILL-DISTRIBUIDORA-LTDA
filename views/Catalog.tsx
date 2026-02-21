@@ -131,7 +131,6 @@ const Catalog: React.FC<CatalogProps> = ({
                         className="w-full h-full object-cover"
                         src="/principal.png"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/40 to-white/90"></div>
                 </div>
                 <div className="relative z-20 text-center max-w-5xl px-4 md:px-6">
 
