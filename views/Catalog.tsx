@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Product, User, CartItem } from '../types';
 
 interface CatalogProps {
@@ -32,6 +32,31 @@ const Catalog: React.FC<CatalogProps> = ({
     const [selectedFlavor, setSelectedFlavor] = React.useState('');
     const [qty, setQty] = React.useState(1);
     const [crates, setCrates] = React.useState(0);
+    const catalogRef = useRef<HTMLDivElement>(null);
+
+    const scrollToCatalog = () => {
+        catalogRef.current?.scrollIntoView({ behavior: 'smooth' });
+    };
+
+    useEffect(() => {
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        const revealElements = document.querySelectorAll('.reveal');
+        revealElements.forEach(el => observer.observe(el));
+
+        return () => observer.disconnect();
+    }, [products, categories]); // Re-run when products change
 
     const handleStartConfig = (e: React.MouseEvent, product: Product) => {
         e.stopPropagation();
@@ -113,14 +138,17 @@ const Catalog: React.FC<CatalogProps> = ({
                     <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-black text-slate-900 leading-[1.1] mb-6 md:mb-12 tracking-tight uppercase" style={{ textShadow: '1px 2px 6px rgba(0,0,0,0.18)' }}>
                         FAÇA O SEU <br />PEDIDO DA <span className="text-blue-600 font-black" style={{ textShadow: '0 0 14px rgba(0,0,0,0.5), 0 0 30px rgba(0,0,0,0.25), 1px 2px 6px rgba(0,0,0,0.3)' }}>ILL & <br />DISTRIBUIDORA</span>
                     </h1>
-                    <button className="border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-6 md:px-12 py-3 md:py-5 rounded-lg font-bold text-sm md:text-lg transition-all uppercase tracking-wider shadow-lg">
+                    <button
+                        onClick={scrollToCatalog}
+                        className="border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-6 md:px-12 py-3 md:py-5 rounded-lg font-bold text-sm md:text-lg transition-all uppercase tracking-wider shadow-lg active:scale-95"
+                    >
                         Ver Catálogo
                     </button>
                 </div>
             </section>
 
             {/* Product Section */}
-            <section className="py-12 md:py-24 px-4 md:px-6 max-w-7xl mx-auto">
+            <section ref={catalogRef} className="py-12 md:py-24 px-4 md:px-6 max-w-7xl mx-auto">
                 <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
                     <div>
                         <h2 className="text-amber-600 font-bold tracking-widest text-sm uppercase mb-3">Sua Próxima Experiência</h2>
@@ -145,7 +173,7 @@ const Catalog: React.FC<CatalogProps> = ({
 
                         return (
                             <section key={category}>
-                                <div className="flex items-center gap-4 mb-12">
+                                <div className="flex items-center gap-4 mb-12 reveal">
                                     <div className="h-px bg-slate-200 flex-1"></div>
                                     <h3 className="text-3xl md:text-4xl font-black text-slate-900 uppercase tracking-tighter text-center px-4">
                                         {category}
@@ -158,7 +186,7 @@ const Catalog: React.FC<CatalogProps> = ({
                                         <div
                                             key={product.id}
                                             onClick={() => onProductClick(product)}
-                                            className="group relative overflow-hidden rounded-3xl bg-white shadow-xl shadow-slate-200/50 cursor-pointer hover:-translate-y-2 transition-transform duration-500"
+                                            className="group relative overflow-hidden rounded-3xl bg-white shadow-xl shadow-slate-200/50 cursor-pointer hover:-translate-y-2 transition-transform duration-500 reveal"
                                         >
                                             <div className="aspect-[3/4] overflow-hidden relative">
                                                 <img

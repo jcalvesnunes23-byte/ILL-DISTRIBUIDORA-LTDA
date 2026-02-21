@@ -73,3 +73,26 @@
     animation: rotate-glow 2s linear infinite, pulse-glow 1s ease-in-out infinite;
     filter: blur(10px);
 }
+
+/* Animations for reveal on scroll - Added by Antigravity */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
