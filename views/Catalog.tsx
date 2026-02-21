@@ -125,16 +125,17 @@ const Catalog: React.FC<CatalogProps> = ({
 
             {/* Hero Section */}
             <section className="relative h-[60vh] md:h-[85vh] pt-16 md:pt-20 flex items-center justify-center overflow-hidden">
-                <div className="absolute inset-0 z-0">
-                    <img
-                        alt="ILL & Distribuidora Hero"
-                        className="w-full h-full object-cover"
-                        src="/principal.png"
-                    />
+                <div
+                    className="absolute inset-0 z-0 bg-[#0a0a2e]"
+                    style={{
+                        backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%' height='100%25'%3E%3Cdefs%3E%3Cpattern id='topography' width='600' height='600' patternUnits='userSpaceOnUse'%3E%3Cpath d='M0 150 Q 75 160 150 150 T 300 150 T 450 150 T 600 150 M0 300 Q 75 310 150 300 T 300 300 T 450 300 T 600 300 M0 450 Q 75 460 150 450 T 300 450 T 450 450 T 600 450' fill='none' stroke='white' stroke-opacity='0.1' stroke-width='1'/%3E%3Cpath d='M0 75 Q 75 85 150 75 T 300 75 T 450 75 T 600 75 M0 225 Q 75 235 150 225 T 300 225 T 450 225 T 600 225 M0 375 Q 75 385 150 375 T 300 375 T 450 375 T 600 375 M0 525 Q 75 535 150 525 T 300 525 T 450 525 T 600 525' fill='none' stroke='white' stroke-opacity='0.05' stroke-width='0.5'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23topography)' /%3E%3C/svg%3E")`,
+                        backgroundAttachment: 'fixed'
+                    }}
+                >
                 </div>
                 <div className="relative z-20 text-center max-w-5xl px-4 md:px-6">
 
-                    <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-black text-slate-900 leading-[1.1] mb-6 md:mb-12 tracking-tight uppercase">
+                    <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-black text-white leading-[1.1] mb-6 md:mb-12 tracking-tight uppercase">
                         FAÇA O SEU <br />PEDIDO DA <span className="text-blue-600 font-black">ILL & <br />DISTRIBUIDORA</span>
                     </h1>
                     <button
