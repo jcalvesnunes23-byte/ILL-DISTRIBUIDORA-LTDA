@@ -116,6 +116,26 @@ const App: React.FC = () => {
         };
       }
     } else {
+      // 2.2 Check if profile needs update (sync metadata to DB)
+      const needsUpdate = (
+        (initialUser.cnpj && !profile.cnpj) ||
+        (initialUser.phone && !profile.phone) ||
+        (initialUser.businessCategory && !profile.business_category) ||
+        (initialUser.address && !profile.address)
+      );
+
+      if (needsUpdate) {
+        await supabase
+          .from('profiles')
+          .update({
+            cnpj: profile.cnpj || initialUser.cnpj,
+            phone: profile.phone || initialUser.phone,
+            business_category: profile.business_category || initialUser.businessCategory,
+            address: profile.address || initialUser.address
+          })
+          .eq('id', session.user.id);
+      }
+
       finalUser = {
         ...initialUser,
         name: profile.name || initialUser.name,
