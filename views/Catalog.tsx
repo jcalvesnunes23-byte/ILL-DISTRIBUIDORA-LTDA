@@ -103,16 +103,7 @@ const Catalog: React.FC<CatalogProps> = ({
                         <h1 className="text-sm md:text-2xl font-extrabold tracking-tighter uppercase truncate">ILL & DISTRIBUIDORA LTDA</h1>
                     </div>
                     <div className="flex items-center gap-2 md:gap-4 shrink-0">
-                        {!user ? (
-                            <>
-                                <button onClick={() => onRegister()} className="hidden sm:block bg-white text-blue-600 hover:bg-white/90 px-3 md:px-6 py-2 text-[9px] md:text-xs font-bold tracking-widest uppercase transition-colors">
-                                    CADASTRE SUA EMPRESA
-                                </button>
-                                <button onClick={() => onLogin()} className="border border-white text-white hover:bg-white/10 px-3 md:px-8 py-2 text-[9px] md:text-xs font-bold tracking-widest uppercase transition-colors">
-                                    ENTRAR
-                                </button>
-                            </>
-                        ) : (
+                        {user && (
                             <button
                                 onClick={onGoToProfile}
                                 className="flex items-center gap-2 md:gap-3 group"
