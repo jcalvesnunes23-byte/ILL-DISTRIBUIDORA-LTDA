@@ -317,7 +317,7 @@ const App: React.FC = () => {
         alert('Erro ao adicionar produto: ' + error.message);
       } else {
         // Refresh products
-        const { data } = await supabase.from('products').select('*');
+        const { data } = await supabase.from('products').select('*').neq('status', 'Excluído');
         if (data) setProducts(data);
       }
     } catch (err: any) {
