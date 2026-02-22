@@ -2,11 +2,9 @@
 import React, { useState } from 'react';
 import { View, Product, CartItem, User, Order } from './types';
 import { MOCK_PRODUCTS } from './constants';
-import Login from './views/Login';
 import Catalog from './views/Catalog';
 import ProductDetail from './views/ProductDetail';
 import AdminDashboard from './views/AdminDashboard';
-import Registration from './views/Registration';
 import Cart from './views/Cart';
 import Profile from './views/Profile';
 import AdminLogin from './views/AdminLogin';
@@ -215,11 +213,11 @@ const App: React.FC = () => {
   useEffect(() => {
     if (user) {
       if (user.role === 'ADMIN') {
-        if (currentView === 'ADMIN_LOGIN' || currentView === 'LOGIN' || currentView === 'REGISTRATION') {
+        if (currentView === 'ADMIN_LOGIN') {
           navigateTo('ADMIN');
         }
       } else {
-        if (currentView === 'LOGIN' || currentView === 'REGISTRATION' || currentView === 'ADMIN') {
+        if (currentView === 'ADMIN') {
           navigateTo('CATALOG');
         }
       }
@@ -245,17 +243,6 @@ const App: React.FC = () => {
     setToast({ message: `${item.product.name} adicionado ao carrinho!`, visible: true });
     setTimeout(() => setToast(prev => ({ ...prev, visible: false })), 3000);
   };
-  const handleLogin = async (data: any) => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email: data.email,
-      password: data.password,
-    });
-    if (error) {
-      alert('Erro no login: ' + error.message);
-    }
-    // Redirection is now handled by the auto-redirect useEffect
-  };
-
   const handleAdminLogin = async (data: any) => {
     const { error } = await supabase.auth.signInWithPassword({
       email: data.email,
@@ -268,32 +255,7 @@ const App: React.FC = () => {
   };
 
   const handleRegister = async (data: any) => {
-    const { data: authData, error } = await supabase.auth.signUp({
-      email: data.email,
-      password: data.password,
-      options: {
-        data: {
-          name: data.name,
-          company_name: data.companyName,
-          cnpj: data.cnpj,
-          phone: data.phone,
-          business_category: data.businessCategory,
-          address: data.address
-        }
-      }
-    });
-
-    if (error) {
-      alert('Erro no cadastro: ' + error.message);
-    } else {
-      if (authData.session) {
-        alert('Empresa cadastrada com sucesso! Você já pode navegar pelo catálogo.');
-        navigateTo('CATALOG');
-      } else {
-        alert('Cadastro realizado! Quase pronto... enviamos um link de confirmação para o seu e-mail.');
-        navigateTo('LOGIN');
-      }
-    }
+    // Cadastro de clientes removido
   };
 
   const handleLogout = async () => {
@@ -451,55 +413,38 @@ const App: React.FC = () => {
   };
 
   const handleCheckout = async (items: CartItem[], address: string, subtotal: number, total: number) => {
-    if (!user) {
-      alert('Você precisa estar logado para realizar um pedido.');
-      navigateTo('LOGIN');
-      return;
-    }
+    let orderIdPreview = Math.random().toString(36).substring(2, 6).toUpperCase();
 
-    // Get current user session
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) {
-      alert('Sessão expirada. Por favor, faça login novamente.');
-      navigateTo('LOGIN');
-      return;
-    }
+    // Se houver um usuário logado (geralmente ADM testando ou futuro), tentamos salvar no banco
+    if (user) {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        const { data: order, error: orderError } = await supabase
+          .from('orders')
+          .insert([{
+            user_id: session.user.id,
+            total_amount: total,
+            status: 'Pendente',
+            delivery_address: address
+          }])
+          .select()
+          .single();
 
-    // 1. Insert order
-    const { data: order, error: orderError } = await supabase
-      .from('orders')
-      .insert([{
-        user_id: session.user.id,
-        total_amount: total,
-        status: 'Pendente',
-        delivery_address: address
-      }])
-      .select()
-      .single();
-
-    if (orderError) {
-      alert('Erro ao processar pedido: ' + orderError.message);
-      return;
-    }
-
-    // 2. Insert order items
-    const orderItems = items.map(item => ({
-      order_id: order.id,
-      product_id: item.product.id,
-      quantity: item.quantity,
-      price_at_time: item.product.price,
-      selected_flavor: item.selectedFlavor
-    }));
-
-    const { error: itemsError } = await supabase.from('order_items').insert(orderItems);
-
-    if (itemsError) {
-      alert('Erro ao salvar itens do pedido: ' + itemsError.message);
-      return;
+        if (!orderError && order) {
+          orderIdPreview = order.id.substring(0, 4).toUpperCase();
+          const orderItems = items.map(item => ({
+            order_id: order.id,
+            product_id: item.product.id,
+            quantity: item.quantity,
+            price_at_time: item.product.price,
+            selected_flavor: item.selectedFlavor
+          }));
+          await supabase.from('order_items').insert(orderItems);
+        }
+      }
     }
 
     // 3. Build WhatsApp Message & Notify
-    const orderIdPreview = order.id.substring(0, 4).toUpperCase();
     const now = new Date();
     const dateStr = now.toLocaleDateString('pt-BR');
     const timeStr = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
@@ -600,7 +545,7 @@ const App: React.FC = () => {
 
   return (
     <div className="font-sans text-slate-900 text-slate-900">
-      {currentView === 'LOGIN' && <Login onLogin={handleLogin} onRegister={() => navigateTo('REGISTRATION')} />}
+      {/* {currentView === 'LOGIN' && <Login onLogin={handleLogin} onRegister={() => navigateTo('REGISTRATION')} />} */}
       {currentView === 'CATALOG' && (
         <Catalog
           user={user}
@@ -608,8 +553,6 @@ const App: React.FC = () => {
           categories={categories}
           onGoToCart={() => navigateTo('CART')}
           onProductClick={handleProductClick}
-          onLogin={() => navigateTo('LOGIN')}
-          onRegister={() => navigateTo('REGISTRATION')}
           onGoToProfile={() => navigateTo('PROFILE')}
           onGoToAdminLogin={() => navigateTo('ADMIN_LOGIN')}
           cartCount={cart.length}
@@ -637,13 +580,7 @@ const App: React.FC = () => {
           onLogout={handleLogout}
         />
       )}
-      {currentView === 'ADMIN_LOGIN' && <AdminLogin onLogin={handleAdminLogin} onBack={() => navigateTo('LOGIN')} />}
-      {currentView === 'REGISTRATION' && (
-        <Registration
-          onBack={() => navigateTo('CATALOG')}
-          onRegister={handleRegister}
-        />
-      )}
+      {currentView === 'ADMIN_LOGIN' && <AdminLogin onLogin={handleAdminLogin} onBack={() => navigateTo('CATALOG')} />}
       {currentView === 'PROFILE' && user && (
         <Profile user={user} onBack={() => navigateTo('CATALOG')} onUpdateProfile={handleUpdateProfile} onLogout={handleLogout} />
       )}

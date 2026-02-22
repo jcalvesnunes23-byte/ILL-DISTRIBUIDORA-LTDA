@@ -24,10 +24,12 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, user, onAddToCar
           <div className="flex items-center gap-2">
             <h1 className="text-sm md:text-xl font-extrabold tracking-tighter uppercase leading-none">ILL & DISTRIBUIDORA</h1>
           </div>
-          <div className="flex items-center gap-2">
-            <img alt="User" className="size-7 md:size-8 rounded-full border-2 border-white/20" src={user?.avatar || "https://picsum.photos/seed/user/100/100"} />
-            <span className="text-xs md:text-sm font-medium hidden sm:block">{user?.companyName || user?.name || 'Empresa Cadastrada'}</span>
-          </div>
+          {user && (
+            <div className="flex items-center gap-2">
+              <img alt="User" className="size-7 md:size-8 rounded-full border-2 border-white/20" src={user?.avatar || "https://picsum.photos/seed/user/100/100"} />
+              <span className="text-xs md:text-sm font-medium hidden sm:block">{user?.companyName || user?.name || 'Empresa Cadastrada'}</span>
+            </div>
+          )}
         </div>
       </header>
 

@@ -8,8 +8,6 @@ interface CatalogProps {
     cartCount: number;
     restoreScrollY?: number;
     onGoToCart: () => void;
-    onLogin: () => void;
-    onRegister: () => void;
     onGoToProfile: () => void;
     onProductClick: (product: Product) => void;
     onGoToAdminLogin: () => void;
@@ -23,8 +21,6 @@ const Catalog: React.FC<CatalogProps> = ({
     cartCount,
     restoreScrollY,
     onGoToCart,
-    onLogin,
-    onRegister,
     onGoToProfile,
     onProductClick,
     onGoToAdminLogin,
@@ -70,12 +66,6 @@ const Catalog: React.FC<CatalogProps> = ({
 
     const handleStartConfig = (e: React.MouseEvent, product: Product) => {
         e.stopPropagation();
-        if (!user) {
-            if (confirm('Você precisa estar logado para adicionar produtos ao carrinho. Deseja fazer login agora?')) {
-                onLogin();
-            }
-            return;
-        }
         setConfigProductId(product.id);
         setSelectedFlavor(product.flavors?.[0] || '');
         setQty(1);

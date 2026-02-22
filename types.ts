@@ -17,7 +17,7 @@ export interface CartItem {
   crates?: number;
 }
 
-export type View = 'LOGIN' | 'CATALOG' | 'PRODUCT_DETAIL' | 'ADMIN' | 'REGISTRATION' | 'CART' | 'PROFILE' | 'ADMIN_LOGIN';
+export type View = 'CATALOG' | 'PRODUCT_DETAIL' | 'ADMIN' | 'CART' | 'PROFILE' | 'ADMIN_LOGIN';
 
 export interface User {
   name: string;
