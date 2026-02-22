@@ -168,7 +168,7 @@ const App: React.FC = () => {
           supabase.from('categories').select('name')
         ]);
         if (prodRes.data) setProducts(prodRes.data);
-        if (catRes.data) setCategories(catRes.data.map(c => c.name));
+        if (catRes.data) setCategories(catRes.data.map(c => c.name).filter(n => n !== 'Arquivados'));
 
         const { data: { session } } = await supabase.auth.getSession();
         if (session) await handleAuthUser(session);
@@ -352,6 +352,11 @@ const App: React.FC = () => {
   };
 
   const handleAddCategory = async (name: string) => {
+    if (name.trim().toLowerCase() === 'arquivados') {
+      alert('Este nome é reservado para o sistema.');
+      return;
+    }
+
     try {
       const { error } = await supabase.from('categories').insert([{ name }]);
 
@@ -364,7 +369,7 @@ const App: React.FC = () => {
       // Refresh Categories
       const { data } = await supabase.from('categories').select('name');
       if (data) {
-        setCategories(data.map(c => c.name));
+        setCategories(data.map(c => c.name).filter(n => n !== 'Arquivados'));
       }
     } catch (err: any) {
       alert('Erro inesperado: ' + (err.message || err));
@@ -390,19 +395,43 @@ const App: React.FC = () => {
   };
 
   const handleDeleteCategory = async (categoryToDelete: string) => {
+    let finalError = null;
+
+    // Tenta excluir a categoria diretamente
     const { error } = await supabase
       .from('categories')
       .delete()
       .eq('name', categoryToDelete);
 
-    if (error) {
-      alert('Erro ao excluir categoria: ' + error.message);
-    } else {
-      // Refresh local state from database to ensure sync
-      const { data: catData } = await supabase.from('categories').select('name');
-      if (catData) setCategories(catData.map(c => c.name));
+    if (error && error.message.includes('violates foreign key constraint')) {
+      // Se houver conflito de FK, significa que há produtos que foram vendidos.
+      // 1. Cria a categoria oculta se não existir (ignora erro se já existir)
+      await supabase.from('categories').insert([{ name: 'Arquivados' }]);
 
-      // Also filters local products for instant feedback
+      // 2. Move os produtos da categoria para a categoria oculta e exclui logicamente
+      await supabase.from('products')
+        .update({ category: 'Arquivados', status: 'Excluído' })
+        .eq('category', categoryToDelete);
+
+      // 3. Tenta deletar a categoria original novamente agora que está vazia
+      const { error: retryError } = await supabase
+        .from('categories')
+        .delete()
+        .eq('name', categoryToDelete);
+
+      if (retryError) finalError = retryError;
+    } else if (error) {
+      finalError = error;
+    }
+
+    if (finalError) {
+      alert('Erro ao excluir categoria: ' + finalError.message);
+    } else {
+      // Atualiza estado local removendo 'Arquivados' da visão
+      const { data: catData } = await supabase.from('categories').select('name');
+      if (catData) setCategories(catData.map(c => c.name).filter(n => n !== 'Arquivados'));
+
+      // Filtra produtos e os que foram para Arquivados saem da visão
       setProducts(products.filter(p => p.category !== categoryToDelete));
     }
   };
