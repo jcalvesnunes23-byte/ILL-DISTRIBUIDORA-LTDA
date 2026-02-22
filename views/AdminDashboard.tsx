@@ -15,6 +15,7 @@ interface AdminDashboardProps {
   onAddCategory: (category: string) => Promise<void>;
   onEditCategory: (oldName: string, newName: string) => void;
   onDeleteCategory: (category: string) => void;
+  onReorderCategories: (orderedNames: string[]) => Promise<void>;
   onUpdateOrderStatus: (orderId: string, status: string) => void;
   onGoToCatalog: () => void;
   onLogout: () => void;
@@ -30,6 +31,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
   onAddCategory,
   onEditCategory,
   onDeleteCategory,
+  onReorderCategories,
   onUpdateOrderStatus,
   onGoToCatalog,
   onLogout
@@ -60,6 +62,31 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
   // State for editing category
   const [editingCategory, setEditingCategory] = React.useState<string | null>(null);
   const [editedCategoryName, setEditedCategoryName] = React.useState('');
+
+  // State for reordering categories
+  const [showReorderCategories, setShowReorderCategories] = React.useState(false);
+  const [localCategoryOrder, setLocalCategoryOrder] = React.useState<string[]>([]);
+  const [isSavingOrder, setIsSavingOrder] = React.useState(false);
+
+  const openReorderModal = () => {
+    setLocalCategoryOrder([...categories]);
+    setShowReorderCategories(true);
+  };
+
+  const moveCategory = (index: number, direction: 'up' | 'down') => {
+    const newOrder = [...localCategoryOrder];
+    const targetIndex = direction === 'up' ? index - 1 : index + 1;
+    if (targetIndex < 0 || targetIndex >= newOrder.length) return;
+    [newOrder[index], newOrder[targetIndex]] = [newOrder[targetIndex], newOrder[index]];
+    setLocalCategoryOrder(newOrder);
+  };
+
+  const handleSaveOrder = async () => {
+    setIsSavingOrder(true);
+    await onReorderCategories(localCategoryOrder);
+    setIsSavingOrder(false);
+    setShowReorderCategories(false);
+  };
 
   const handleCreateCategory = async (categoryName: string) => {
     if (categoryName.trim()) {
@@ -327,12 +354,20 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
           </div>
           <div className="flex items-center gap-4">
             {activeTab === 'PRODUCTS' && (
-              <button
-                onClick={() => setShowAddCategory(true)}
-                className="bg-slate-900 text-white px-3 py-2 md:px-6 md:py-3 rounded-xl md:rounded-2xl font-bold text-[10px] md:text-xs uppercase tracking-widest hover:bg-slate-800 transition-all flex items-center justify-center gap-2"
-              >
-                <span className="material-symbols-outlined text-sm md:text-base">view_column</span> <span className="hidden sm:inline">Nova Categoria</span>
-              </button>
+              <>
+                <button
+                  onClick={openReorderModal}
+                  className="bg-white text-slate-700 border border-slate-200 px-3 py-2 md:px-5 md:py-3 rounded-xl md:rounded-2xl font-bold text-[10px] md:text-xs uppercase tracking-widest hover:bg-slate-50 transition-all flex items-center justify-center gap-2"
+                >
+                  <span className="material-symbols-outlined text-sm md:text-base">swap_vert</span> <span className="hidden sm:inline">Ordenar</span>
+                </button>
+                <button
+                  onClick={() => setShowAddCategory(true)}
+                  className="bg-slate-900 text-white px-3 py-2 md:px-6 md:py-3 rounded-xl md:rounded-2xl font-bold text-[10px] md:text-xs uppercase tracking-widest hover:bg-slate-800 transition-all flex items-center justify-center gap-2"
+                >
+                  <span className="material-symbols-outlined text-sm md:text-base">view_column</span> <span className="hidden sm:inline">Nova Categoria</span>
+                </button>
+              </>
             )}
           </div>
         </header>
@@ -801,6 +836,59 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   <button type="submit" className="flex-1 py-3 bg-primary text-white font-bold uppercase tracking-wider rounded-xl shadow-lg shadow-primary/20 hover:bg-blue-600 transition-colors">Salvar Alterações</button>
                 </div>
               </form>
+            </div>
+          </div>
+        )}
+
+        {/* Reorder Categories Modal */}
+        {showReorderCategories && (
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md p-8 flex flex-col gap-6 max-h-[80vh] overflow-y-auto">
+              <div>
+                <h3 className="text-xl font-black text-slate-900 mb-1">Ordenar Categorias</h3>
+                <p className="text-sm text-slate-500">Use os botões para mover as categorias. A ordem que você definir aqui é a que aparece no catálogo.</p>
+              </div>
+              <div className="flex flex-col gap-2">
+                {localCategoryOrder.map((cat, index) => (
+                  <div key={cat} className="flex items-center gap-3 bg-slate-50 rounded-2xl px-4 py-3 border border-slate-100">
+                    <span className="text-slate-400 font-bold text-xs w-5 text-center">{index + 1}</span>
+                    <span className="flex-1 font-bold text-slate-800 uppercase tracking-wide text-sm">{cat}</span>
+                    <div className="flex gap-1">
+                      <button
+                        onClick={() => moveCategory(index, 'up')}
+                        disabled={index === 0}
+                        className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-200 disabled:opacity-20 disabled:cursor-not-allowed transition-all"
+                        title="Mover para cima"
+                      >
+                        <span className="material-symbols-outlined text-lg">arrow_upward</span>
+                      </button>
+                      <button
+                        onClick={() => moveCategory(index, 'down')}
+                        disabled={index === localCategoryOrder.length - 1}
+                        className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-200 disabled:opacity-20 disabled:cursor-not-allowed transition-all"
+                        title="Mover para baixo"
+                      >
+                        <span className="material-symbols-outlined text-lg">arrow_downward</span>
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="flex gap-3 pt-2">
+                <button
+                  onClick={() => setShowReorderCategories(false)}
+                  className="flex-1 py-3 text-slate-500 font-bold uppercase tracking-wider hover:bg-slate-50 rounded-xl transition-colors"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={handleSaveOrder}
+                  disabled={isSavingOrder}
+                  className="flex-1 py-3 bg-slate-900 text-white font-bold uppercase tracking-wider rounded-xl shadow-lg shadow-slate-900/20 hover:bg-slate-800 transition-colors disabled:opacity-60"
+                >
+                  {isSavingOrder ? 'Salvando...' : 'Salvar Ordem'}
+                </button>
+              </div>
             </div>
           </div>
         )}

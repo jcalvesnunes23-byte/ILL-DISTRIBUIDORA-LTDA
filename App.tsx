@@ -165,10 +165,10 @@ const App: React.FC = () => {
       try {
         const [prodRes, catRes] = await Promise.all([
           supabase.from('products').select('*').neq('status', 'Excluído'),
-          supabase.from('categories').select('name')
+          supabase.from('categories').select('name, order_index').order('order_index', { ascending: true })
         ]);
         if (prodRes.data) setProducts(prodRes.data);
-        if (catRes.data) setCategories(catRes.data.map(c => c.name).filter(n => n !== 'Arquivados'));
+        if (catRes.data) setCategories(catRes.data.map((c: any) => c.name).filter((n: string) => n !== 'Arquivados'));
 
         const { data: { session } } = await supabase.auth.getSession();
         if (session) await handleAuthUser(session);
@@ -436,6 +436,16 @@ const App: React.FC = () => {
     }
   };
 
+  const handleReorderCategories = async (orderedNames: string[]) => {
+    // Salva order_index para cada categoria em paralelo
+    const updates = orderedNames.map((name, index) =>
+      supabase.from('categories').update({ order_index: index }).eq('name', name)
+    );
+    await Promise.all(updates);
+    // Atualiza o estado local com a nova ordem (sem refetch)
+    setCategories(orderedNames);
+  };
+
   const handleCheckout = async (items: CartItem[], address: string, subtotal: number, total: number) => {
     if (!user) {
       alert('Você precisa estar logado para realizar um pedido.');
@@ -615,6 +625,7 @@ const App: React.FC = () => {
           onAddCategory={handleAddCategory}
           onEditCategory={handleEditCategory}
           onDeleteCategory={handleDeleteCategory}
+          onReorderCategories={handleReorderCategories}
           onUpdateOrderStatus={handleUpdateOrderStatus}
           onGoToCatalog={() => navigateTo('CATALOG')}
           onLogout={handleLogout}
