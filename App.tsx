@@ -454,7 +454,7 @@ const App: React.FC = () => {
     message += `------ ITENS DO PEDIDO ------\n\n`;
 
     items.forEach((item, index) => {
-      message += `*[${item.quantity}] x ${item.product.name.toUpperCase()}* \n`;
+      message += `*[${item.quantity}] x ${item.product.category.toUpperCase()}* - ${item.selectedFlavor} \n`;
       message += `${item.quantity} x R$ ${item.product.price.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} = R$ ${(item.quantity * item.product.price).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}\n`;
 
       // Add 2 spaces (empty lines) between items, but not after the last one
