@@ -475,8 +475,7 @@ const App: React.FC = () => {
     });
 
     message += `\n\n -----------------------------\n\n`;
-    message += `*Valor final:* R$ ${total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}\n\n`;
-    message += `💲 *Forma de pagamento* A Combinar: R$ ${total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
+    message += `*Valor final:* R$ ${total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
 
     const encodedMessage = encodeURIComponent(message);
     window.open(`https://wa.me/5527996531969?text=${encodedMessage}`, '_blank');
