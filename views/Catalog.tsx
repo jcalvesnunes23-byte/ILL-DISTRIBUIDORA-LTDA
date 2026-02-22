@@ -146,90 +146,93 @@ const Catalog: React.FC<CatalogProps> = ({
                                         <p className="text-slate-500 font-medium">Nenhum produto cadastrado nesta categoria ainda.</p>
                                     </div>
                                 ) : (
-                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
+                                    <div className="flex flex-col gap-4">
                                         {categoryProducts.map((product) => (
                                             <div
                                                 key={product.id}
                                                 onClick={() => onProductClick(product)}
-                                                className="group relative overflow-hidden rounded-3xl bg-white shadow-xl shadow-slate-200/50 cursor-pointer hover:-translate-y-2 transition-transform duration-500 reveal"
+                                                className="group relative bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden cursor-pointer hover:shadow-md transition-shadow reveal"
                                             >
-                                                <div className="aspect-[3/4] overflow-hidden relative">
-                                                    <img
-                                                        alt={product.name}
-                                                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                                                        src={product.image}
-                                                    />
-                                                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity"></div>
+                                                <div className="flex flex-row sm:h-36">
+                                                    {/* Imagem e Botão Esquerdo */}
+                                                    <div className="w-32 h-36 sm:w-40 sm:h-full shrink-0 relative bg-slate-100 flex flex-col items-center justify-between">
+                                                        <div className="w-full h-full p-2 pb-8 sm:p-4 sm:pb-10 relative">
+                                                            <img
+                                                                alt={product.name}
+                                                                className="w-full h-full object-cover rounded-lg border border-slate-200/50"
+                                                                src={product.image}
+                                                            />
+                                                        </div>
+                                                        <button
+                                                            onClick={(e) => handleStartConfig(e, product)}
+                                                            className="absolute bottom-0 inset-x-0 bg-red-600 text-white py-1.5 sm:py-2 text-[10px] sm:text-xs font-bold uppercase tracking-wide text-center hover:bg-red-700 transition-colors"
+                                                        >
+                                                            {configProductId === product.id ? 'Configurando...' : 'Ganhe pontos'}
+                                                        </button>
+                                                    </div>
+
+                                                    {/* Informações do Lado Direito */}
+                                                    <div className="flex-1 p-3 sm:p-4 flex flex-col justify-between min-w-0">
+                                                        <div>
+                                                            <h4 className="text-sm sm:text-base font-bold uppercase tracking-tight text-slate-800 line-clamp-2 leading-tight mb-1">{product.name}</h4>
+                                                            <p className="text-xs text-slate-500 line-clamp-2 leading-snug">
+                                                                {product.description || 'Descrição não informada. Produto de altíssima qualidade ILL & DISTRIBUIDORA.'}
+                                                            </p>
+                                                        </div>
+                                                        <div className="mt-2 flex items-center justify-between">
+                                                            <p className="text-sm sm:text-base font-black text-slate-900">
+                                                                R$ {product.price.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                                                            </p>
+                                                        </div>
+                                                    </div>
                                                 </div>
 
-                                                <div className="absolute bottom-0 inset-x-0 p-8 text-white">
-                                                    <h4 className="text-2xl font-black uppercase tracking-tight mb-2 group-hover:text-blue-400 transition-colors">{product.name}</h4>
-                                                    <p className="text-lg font-bold">
-                                                        R$ {product.price.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
-                                                    </p>
-
-                                                    {product.flavors && product.flavors.length > 0 && (
-                                                        <div className="flex flex-wrap gap-1.5 mt-3">
-                                                            {product.flavors.slice(0, 3).map((flavor, index) => (
-                                                                <span key={index} className="px-2 py-0.5 bg-white/20 backdrop-blur-md text-[9px] font-bold uppercase tracking-wider rounded-md border border-white/10">
-                                                                    {flavor}
-                                                                </span>
-                                                            ))}
-                                                            {product.flavors.length > 3 && (
-                                                                <span className="text-[9px] font-bold opacity-60">+{product.flavors.length - 3}</span>
-                                                            )}
-                                                        </div>
-                                                    )}
-
-                                                    {configProductId === product.id ? (
-                                                        <div className="mt-4 space-y-4 bg-slate-900/60 backdrop-blur-md p-4 rounded-2xl border border-white/10" onClick={e => e.stopPropagation()}>
-                                                            {product.flavors && product.flavors.length > 0 && (
-                                                                <div className="space-y-2">
-                                                                    <label className="text-[10px] font-bold uppercase tracking-wider opacity-60">Sabor</label>
-                                                                    <div className="flex flex-wrap gap-1">
-                                                                        {product.flavors.map(f => (
-                                                                            <button
-                                                                                key={f}
-                                                                                onClick={() => setSelectedFlavor(f)}
-                                                                                className={`px-2 py-1 rounded text-[9px] font-bold transition-all ${selectedFlavor === f ? 'bg-blue-600 text-white' : 'bg-white/10 text-white hover:bg-white/20'}`}
-                                                                            >
-                                                                                {f}
-                                                                            </button>
-                                                                        ))}
-                                                                    </div>
-                                                                </div>
-                                                            )}
-                                                            <div className="flex gap-4">
-                                                                <div className="w-full space-y-2">
-                                                                    <label className="text-[10px] font-bold uppercase tracking-wider opacity-60">Qtd</label>
-                                                                    <div className="flex items-center bg-white/10 rounded-lg overflow-hidden border border-white/10">
-                                                                        <button onClick={() => setQty(q => Math.max(1, q - 1))} className="p-2 hover:bg-white/10"><span className="material-symbols-outlined text-xs">remove</span></button>
-                                                                        <span className="flex-1 text-center text-xs font-bold">{qty}</span>
-                                                                        <button onClick={() => setQty(q => q + 1)} className="p-2 hover:bg-white/10"><span className="material-symbols-outlined text-xs">add</span></button>
-                                                                    </div>
+                                                {/* Painel de Configuração Expandido */}
+                                                {configProductId === product.id && (
+                                                    <div className="bg-slate-50 border-t border-slate-100 p-4" onClick={e => e.stopPropagation()}>
+                                                        {product.flavors && product.flavors.length > 0 && (
+                                                            <div className="space-y-2 mb-4">
+                                                                <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Sabor/Opções</label>
+                                                                <div className="flex flex-wrap gap-2">
+                                                                    {product.flavors.map(f => (
+                                                                        <button
+                                                                            key={f}
+                                                                            onClick={() => setSelectedFlavor(f)}
+                                                                            className={`px-3 py-1.5 rounded-full text-[10px] font-bold transition-all border ${selectedFlavor === f ? 'bg-red-600 text-white border-red-600' : 'bg-white text-slate-600 border-slate-200 hover:border-red-600 hover:text-red-600'}`}
+                                                                        >
+                                                                            {f}
+                                                                        </button>
+                                                                    ))}
                                                                 </div>
                                                             </div>
-                                                            <button
-                                                                onClick={(e) => handleConfirmAdd(e, product)}
-                                                                className="w-full bg-blue-600 text-white py-2 rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-blue-700 transition-all font-bold"
-                                                            >
-                                                                Confirmar Pedido
-                                                            </button>
-                                                        </div>
-                                                    ) : (
-                                                        <div className="mt-6 flex items-center justify-between opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 delay-100">
-                                                            <button
-                                                                onClick={(e) => handleStartConfig(e, product)}
-                                                                className="px-4 py-2 bg-blue-600 text-white rounded-full text-[10px] font-bold uppercase tracking-widest shadow-lg shadow-blue-600/20 hover:scale-105 transition-transform"
-                                                            >
-                                                                Adicionar
-                                                            </button>
-                                                            <div className="size-10 rounded-full bg-white text-slate-900 flex items-center justify-center">
-                                                                <span className="material-symbols-outlined">arrow_forward</span>
+                                                        )}
+                                                        <div className="flex gap-4 mb-4">
+                                                            <div className="w-1/2 space-y-2">
+                                                                <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Quantidade</label>
+                                                                <div className="flex items-center bg-white rounded-lg overflow-hidden border border-slate-200">
+                                                                    <button onClick={() => setQty(q => Math.max(1, q - 1))} className="flex-1 p-2 text-slate-600 hover:bg-slate-50"><span className="material-symbols-outlined text-sm">remove</span></button>
+                                                                    <span className="w-10 text-center text-sm font-bold text-slate-800 border-x border-slate-200 py-1">{qty}</span>
+                                                                    <button onClick={() => setQty(q => q + 1)} className="flex-1 p-2 text-slate-600 hover:bg-slate-50"><span className="material-symbols-outlined text-sm">add</span></button>
+                                                                </div>
+                                                            </div>
+                                                            <div className="w-1/2 space-y-2">
+                                                                <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Fardos</label>
+                                                                <div className="flex items-center bg-white rounded-lg overflow-hidden border border-slate-200">
+                                                                    <button onClick={() => setCrates(c => Math.max(0, c - 1))} className="flex-1 p-2 text-slate-600 hover:bg-slate-50"><span className="material-symbols-outlined text-sm">remove</span></button>
+                                                                    <span className="w-10 text-center text-sm font-bold text-slate-800 border-x border-slate-200 py-1">{crates}</span>
+                                                                    <button onClick={() => setCrates(c => c + 1)} className="flex-1 p-2 text-slate-600 hover:bg-slate-50"><span className="material-symbols-outlined text-sm">add</span></button>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    )}
-                                                </div>
+                                                        <button
+                                                            onClick={(e) => handleConfirmAdd(e, product)}
+                                                            className="w-full bg-red-600 text-white py-3 rounded-lg text-xs font-black uppercase tracking-widest hover:bg-red-700 transition-colors shadow-md flex items-center justify-center gap-2"
+                                                        >
+                                                            <span className="material-symbols-outlined text-base">shopping_bag</span>
+                                                            Adicionar ao Pedido
+                                                        </button>
+                                                    </div>
+                                                )}
                                             </div>
                                         ))}
                                     </div>
