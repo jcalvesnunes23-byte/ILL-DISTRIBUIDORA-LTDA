@@ -455,9 +455,40 @@ const App: React.FC = () => {
       return;
     }
 
-    // 3. Clear cart and notify
+    // 3. Build WhatsApp Message & Notify
+    const orderIdPreview = order.id.substring(0, 4).toUpperCase();
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('pt-BR');
+    const timeStr = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
+    let message = `#️⃣  *Pedido Nº ${orderIdPreview}*\n`;
+    message += `feito em ${dateStr} ${timeStr}\n\n`;
+    message += `------ ITENS DO PEDIDO ------\n\n`;
+
+    items.forEach(item => {
+      message += `*${item.quantity} x ${item.product.name.toUpperCase()}*\n`;
+      if (item.selectedFlavor) {
+        message += `- ${item.selectedFlavor}\n`;
+      }
+      if (item.crates) {
+        message += `- Fardo(s): ${item.crates}\n`;
+      }
+      message += `${item.quantity} x R$ ${item.product.price.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} = R$ ${(item.quantity * item.product.price).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}\n\n`;
+    });
+
+    message += `-----------------------------\n\n`;
+    message += `*Subtotal:* R$ ${subtotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}\n`;
+    message += `*Taxa de entrega:* Grátis\n\n`;
+    message += `*Valor final:* R$ ${total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}\n\n`;
+
+    message += `💲  *Forma de pagamento*\n\n`;
+    message += `A Combinar: R$ ${total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
+
+    const encodedMessage = encodeURIComponent(message);
+    window.open(`https://wa.me/5527996531969?text=${encodedMessage}`, '_blank');
+
     setCart([]);
-    navigateTo('ORDER_SUCCESS');
+    navigateTo('CATALOG');
   };
 
   const handleUpdateProfile = async (file: File | null) => {
@@ -582,37 +613,7 @@ const App: React.FC = () => {
         />
       )}
 
-      {currentView === 'ORDER_SUCCESS' && (
-        <div className="min-h-screen bg-white flex flex-col items-center justify-center p-6 text-center">
-          <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mb-8 animate-bounce-subtle">
-            <span className="material-symbols-outlined text-5xl text-green-600">check_circle</span>
-          </div>
 
-          <h1 className="text-3xl md:text-4xl font-black text-slate-900 mb-4 tracking-tighter uppercase leading-none">
-            Pedido Realizado!
-          </h1>
-
-          <div className="max-w-md space-y-6">
-            <p className="text-slate-500 font-medium">
-              Obrigado por confiar na nossa empresa. Seu pedido já foi registrado em nosso sistema e está sendo processado.
-            </p>
-
-            <div className="bg-slate-50 p-6 rounded-3xl border border-slate-100">
-              <h2 className="text-blue-600 font-black text-xl tracking-tighter uppercase mb-2">
-                ILL & DISTRIBUIDORA LTDA
-              </h2>
-              <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Agradecemos a sua preferência</p>
-            </div>
-
-            <button
-              onClick={() => navigateTo('CATALOG')}
-              className="w-full bg-slate-900 text-white py-4 rounded-2xl font-bold uppercase tracking-widest hover:bg-slate-800 transition-all shadow-xl active:scale-95"
-            >
-              Voltar ao Catálogo
-            </button>
-          </div>
-        </div>
-      )}
 
       {/* Floating Buttons - Global */}
       <div className="fixed bottom-6 right-6 flex flex-col gap-4 z-[100]">
