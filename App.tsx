@@ -22,11 +22,15 @@ const App: React.FC = () => {
   const [categories, setCategories] = useState<string[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
   const [toast, setToast] = useState<{ message: string; visible: boolean }>({ message: '', visible: false });
+  const savedScrollY = React.useRef<number>(0);
 
   const navigateTo = useCallback((view: View, product?: Product) => {
     if (product) setSelectedProduct(product);
     setCurrentView(view);
-    window.scrollTo(0, 0);
+    // Ao ir para o catálogo (voltando), não reseta o scroll
+    if (view !== 'CATALOG') {
+      window.scrollTo(0, 0);
+    }
   }, []);
 
   const fetchOrders = useCallback(async () => {
@@ -590,6 +594,7 @@ const App: React.FC = () => {
   };
 
   const handleProductClick = (product: Product) => {
+    savedScrollY.current = window.scrollY;
     navigateTo('PRODUCT_DETAIL', product);
   };
 
@@ -609,6 +614,7 @@ const App: React.FC = () => {
           onGoToAdminLogin={() => navigateTo('ADMIN_LOGIN')}
           cartCount={cart.length}
           onAddToCart={addToCart}
+          restoreScrollY={savedScrollY.current}
         />
       )}
       {currentView === 'PRODUCT_DETAIL' && selectedProduct && (

@@ -6,6 +6,7 @@ interface CatalogProps {
     products: Product[];
     categories: string[];
     cartCount: number;
+    restoreScrollY?: number;
     onGoToCart: () => void;
     onLogin: () => void;
     onRegister: () => void;
@@ -20,6 +21,7 @@ const Catalog: React.FC<CatalogProps> = ({
     products,
     categories,
     cartCount,
+    restoreScrollY,
     onGoToCart,
     onLogin,
     onRegister,
@@ -33,6 +35,14 @@ const Catalog: React.FC<CatalogProps> = ({
     const [qty, setQty] = React.useState(1);
     const [crates, setCrates] = React.useState(0);
     const catalogRef = useRef<HTMLDivElement>(null);
+
+    // Restaura a posição do scroll ao voltar de um detalhe de produto
+    useEffect(() => {
+        if (restoreScrollY) {
+            window.scrollTo({ top: restoreScrollY, behavior: 'instant' });
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const scrollToCatalog = () => {
         catalogRef.current?.scrollIntoView({ behavior: 'smooth' });
