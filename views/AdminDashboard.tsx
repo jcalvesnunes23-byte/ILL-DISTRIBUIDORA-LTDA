@@ -383,7 +383,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     <div className="flex items-center gap-4">
                       <h3 className="text-xl font-black text-slate-800 uppercase tracking-tight">{category}</h3>
                       <span className="bg-slate-200 text-slate-600 px-3 py-1 rounded-lg text-xs font-bold">
-                        {products.filter(p => p.category === category).length} itens
+                        {products.filter(p => p.category === category && p.status !== 'Excluído').length} itens
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
@@ -415,9 +415,9 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   </div>
 
                   {/* Products Grid for this Category */}
-                  <div className={`p-8 ${products.filter(p => p.category === category).length > 0 ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6' : 'flex justify-center items-center py-12'}`}>
-                    {products.filter(p => p.category === category).length > 0 ? (
-                      products.filter(p => p.category === category).map(product => (
+                  <div className={`p-8 ${products.filter(p => p.category === category && p.status !== 'Excluído').length > 0 ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6' : 'flex justify-center items-center py-12'}`}>
+                    {products.filter(p => p.category === category && p.status !== 'Excluído').length > 0 ? (
+                      products.filter(p => p.category === category && p.status !== 'Excluído').map(product => (
                         <div key={product.id} className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-all group flex flex-col">
                           <div className="relative aspect-[4/3] rounded-xl overflow-hidden mb-4 bg-slate-100">
                             <img src={product.image} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />

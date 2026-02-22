@@ -343,21 +343,32 @@ const App: React.FC = () => {
   };
 
   const handleEditCategory = async (oldName: string, newName: string) => {
-    const { error } = await supabase
+    // 1. Update the category name in the categories table
+    const { error: catError } = await supabase
       .from('categories')
       .update({ name: newName })
       .eq('name', oldName);
 
-    if (error) {
-      alert('Erro ao editar categoria: ' + error.message);
-    } else {
-      // Refresh local state from database to ensure sync
-      const { data: catData } = await supabase.from('categories').select('name');
-      if (catData) setCategories(catData.map(c => c.name));
-
-      const { data: prodData } = await supabase.from('products').select('*');
-      if (prodData) setProducts(prodData);
+    if (catError) {
+      alert('Erro ao editar categoria: ' + catError.message);
+      return;
     }
+
+    // 2. Update all products that belonged to the old category name
+    await supabase
+      .from('products')
+      .update({ category: newName })
+      .eq('category', oldName);
+
+    // 3. Refresh local state from database to ensure sync
+    const { data: catData } = await supabase.from('categories').select('name');
+    if (catData) setCategories(catData.map(c => c.name));
+
+    const { data: prodData } = await supabase
+      .from('products')
+      .select('*')
+      .neq('status', 'Excluído'); // CRITICAL: Filter out deleted products
+    if (prodData) setProducts(prodData);
   };
 
   const handleDeleteCategory = async (categoryToDelete: string) => {
