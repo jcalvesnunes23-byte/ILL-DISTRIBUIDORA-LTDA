@@ -461,28 +461,26 @@ const App: React.FC = () => {
     const dateStr = now.toLocaleDateString('pt-BR');
     const timeStr = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 
-    let message = `#️⃣  *Pedido Nº ${orderIdPreview}*\n`;
-    message += `feito em ${dateStr} ${timeStr}\n\n`;
-    message += `------ ITENS DO PEDIDO ------\n\n`;
+    let message = `🚀 *Pedido Nº ${orderIdPreview}* \n`;
+    message += `feito em ${dateStr} ${timeStr}\n \n`;
+    message += `------ ITENS DO PEDIDO ------\n`;
 
     items.forEach(item => {
-      message += `*${item.quantity} x ${item.product.name.toUpperCase()}*\n`;
+      message += ` *${item.quantity} x ${item.product.name.toUpperCase()}*`;
       if (item.selectedFlavor) {
-        message += `- ${item.selectedFlavor}\n`;
+        message += ` - ${item.selectedFlavor}`;
       }
       if (item.crates) {
-        message += `- Fardo(s): ${item.crates}\n`;
+        message += ` - Fardo(s): ${item.crates}`;
       }
-      message += `${item.quantity} x R$ ${item.product.price.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} = R$ ${(item.quantity * item.product.price).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}\n\n`;
+      message += ` ${item.quantity} x R$ ${item.product.price.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} = R$ ${(item.quantity * item.product.price).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}\n`;
     });
 
-    message += `-----------------------------\n\n`;
+    message += `\n -----------------------------\n \n`;
     message += `*Subtotal:* R$ ${subtotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}\n`;
-    message += `*Taxa de entrega:* Grátis\n\n`;
-    message += `*Valor final:* R$ ${total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}\n\n`;
-
-    message += `💲  *Forma de pagamento*\n\n`;
-    message += `A Combinar: R$ ${total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
+    message += ` *Taxa de entrega:* Grátis\n`;
+    message += ` *Valor final:* R$ ${total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}\n`;
+    message += ` 💲 *Forma de pagamento* A Combinar: R$ ${total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
 
     const encodedMessage = encodeURIComponent(message);
     window.open(`https://wa.me/5527996531969?text=${encodedMessage}`, '_blank');
