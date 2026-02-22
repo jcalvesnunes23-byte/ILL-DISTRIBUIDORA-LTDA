@@ -164,7 +164,7 @@ const App: React.FC = () => {
     const initApp = async () => {
       try {
         const [prodRes, catRes] = await Promise.all([
-          supabase.from('products').select('*'),
+          supabase.from('products').select('*').neq('status', 'Excluído'),
           supabase.from('categories').select('name')
         ]);
         if (prodRes.data) setProducts(prodRes.data);
@@ -341,7 +341,7 @@ const App: React.FC = () => {
   const handleDeleteProduct = async (productId: string) => {
     const { error } = await supabase
       .from('products')
-      .delete()
+      .update({ status: 'Excluído' })
       .eq('id', productId);
 
     if (error) {
