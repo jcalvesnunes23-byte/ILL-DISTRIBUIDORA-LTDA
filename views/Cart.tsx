@@ -54,8 +54,6 @@ const Cart: React.FC<CartProps> = ({ items, user, onBack, onRemove, onCheckout }
             </button>
           </div>
           <div className="flex items-center gap-2 md:gap-3">
-            <img alt="User" className="size-7 md:size-8 rounded-full border-2 border-white/20" src={user?.avatar || "https://picsum.photos/seed/user/100/100"} />
-            <span className="text-xs md:text-sm font-medium hidden sm:block">{user?.companyName || user?.name || 'Empresa Cadastrada'}</span>
           </div>
         </div>
       </header>

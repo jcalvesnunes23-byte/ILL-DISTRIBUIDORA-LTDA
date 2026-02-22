@@ -93,23 +93,6 @@ const Catalog: React.FC<CatalogProps> = ({
                         <h1 className="text-sm md:text-2xl font-extrabold tracking-tighter uppercase truncate">ILL & DISTRIBUIDORA LTDA</h1>
                     </div>
                     <div className="flex items-center gap-2 md:gap-4 shrink-0">
-                        {user && (
-                            <button
-                                onClick={onGoToProfile}
-                                className="flex items-center gap-2 md:gap-3 group"
-                            >
-                                <div className="w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-white/20 overflow-hidden group-hover:scale-105 transition-transform">
-                                    <img
-                                        src={user.avatar || 'https://via.placeholder.com/40'}
-                                        alt="Profile"
-                                        className="w-full h-full object-cover"
-                                    />
-                                </div>
-                                <span className="text-white text-sm font-medium hidden md:block">
-                                    {user.companyName || user.name || 'Empresa Cadastrada'}
-                                </span>
-                            </button>
-                        )}
                     </div>
                 </div>
             </header>
