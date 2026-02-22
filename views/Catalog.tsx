@@ -168,13 +168,15 @@ const Catalog: React.FC<CatalogProps> = ({
                                                     {/* Informações do Lado Direito */}
                                                     <div className="flex-1 p-3 sm:p-4 flex flex-col justify-between min-w-0">
                                                         <div>
-                                                            <h4 className="text-sm sm:text-base font-bold uppercase tracking-tight text-slate-800 line-clamp-2 leading-tight mb-1">{product.name}</h4>
-                                                            <p className="text-xs text-slate-500 line-clamp-2 leading-snug">
-                                                                {product.description || 'Descrição não informada. Produto de altíssima qualidade ILL & DISTRIBUIDORA.'}
-                                                            </p>
+                                                            <h4 className="text-base sm:text-lg font-bold uppercase tracking-tight text-slate-800 line-clamp-2 leading-tight mb-1">{product.name}</h4>
+                                                            {product.description && product.description.trim() !== '' && (
+                                                                <p className="text-xs text-slate-500 line-clamp-2 leading-snug">
+                                                                    {product.description}
+                                                                </p>
+                                                            )}
                                                         </div>
                                                         <div className="mt-2 flex items-center justify-between">
-                                                            <p className="text-sm sm:text-base font-black text-slate-900">
+                                                            <p className="text-base sm:text-lg font-black text-slate-900">
                                                                 R$ {product.price.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                                                             </p>
                                                         </div>
