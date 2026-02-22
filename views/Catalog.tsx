@@ -82,7 +82,7 @@ const Catalog: React.FC<CatalogProps> = ({
     };
 
     return (
-        <div className="min-h-screen bg-white">
+        <div className="min-h-screen" style={{ background: 'linear-gradient(145deg, #0f172a 0%, #1e1b4b 40%, #1e3a5f 100%)' }}>
             {/* Header Bar */}
             <header className="fixed top-0 w-full z-50 bg-blue-600 shadow-lg h-16 md:h-20 flex items-center px-4 md:px-6">
                 <div className="max-w-7xl mx-auto w-full flex justify-between items-center">
@@ -133,17 +133,17 @@ const Catalog: React.FC<CatalogProps> = ({
                         return (
                             <section key={category}>
                                 <div className="flex items-center gap-4 mb-12 reveal">
-                                    <div className="h-px bg-slate-200 flex-1"></div>
-                                    <h3 className="text-3xl md:text-4xl font-black text-slate-900 uppercase tracking-tighter text-center px-4">
+                                    <div className="h-px bg-white/20 flex-1"></div>
+                                    <h3 className="text-3xl md:text-4xl font-black text-white uppercase tracking-tighter text-center px-4 drop-shadow-lg">
                                         {category}
                                     </h3>
-                                    <div className="h-px bg-slate-200 flex-1"></div>
+                                    <div className="h-px bg-white/20 flex-1"></div>
                                 </div>
 
                                 {categoryProducts.length === 0 ? (
-                                    <div className="text-center py-12 bg-slate-50 rounded-3xl border border-slate-100">
-                                        <span className="material-symbols-outlined text-4xl text-slate-300 mb-3">inventory_2</span>
-                                        <p className="text-slate-500 font-medium">Nenhum produto cadastrado nesta categoria ainda.</p>
+                                    <div className="text-center py-12 bg-white/5 rounded-3xl border border-white/10">
+                                        <span className="material-symbols-outlined text-4xl text-white/30 mb-3">inventory_2</span>
+                                        <p className="text-white/50 font-medium">Nenhum produto cadastrado nesta categoria ainda.</p>
                                     </div>
                                 ) : (
                                     <div className="flex flex-col gap-4">
@@ -151,7 +151,8 @@ const Catalog: React.FC<CatalogProps> = ({
                                             <div
                                                 key={product.id}
                                                 onClick={() => onProductClick(product)}
-                                                className="group relative bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden cursor-pointer hover:shadow-md transition-shadow reveal"
+                                                className="group relative bg-white rounded-2xl overflow-hidden cursor-pointer reveal transition-all duration-300 hover:-translate-y-1"
+                                                style={{ boxShadow: '0 4px 24px rgba(0,0,0,0.35), 0 1.5px 6px rgba(30,160,255,0.08)' }}
                                             >
                                                 <div className="flex flex-row sm:h-36">
                                                     {/* Imagem e Botão Esquerdo */}
@@ -240,7 +241,7 @@ const Catalog: React.FC<CatalogProps> = ({
             </section>
 
 
-            <footer className="bg-blue-600 py-10 text-white text-center">
+            <footer className="py-10 text-white text-center" style={{ background: 'rgba(0,0,0,0.3)' }}>
                 <p className="opacity-80 text-sm font-medium">© 2024 ILL & DISTRIBUIDORA LTDA. Todos os direitos reservados.</p>
                 <button onClick={onGoToAdminLogin} className="text-[10px] opacity-60 uppercase tracking-widest hover:opacity-100 mt-2">Administração</button>
             </footer>
