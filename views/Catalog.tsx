@@ -155,20 +155,14 @@ const Catalog: React.FC<CatalogProps> = ({
                                             >
                                                 <div className="flex flex-row sm:h-36">
                                                     {/* Imagem e Botão Esquerdo */}
-                                                    <div className="w-32 h-36 sm:w-40 sm:h-full shrink-0 relative bg-slate-100 flex flex-col items-center justify-between">
-                                                        <div className="w-full h-full p-2 pb-8 sm:p-4 sm:pb-10 relative">
+                                                    <div className="w-32 h-36 sm:w-40 sm:h-full shrink-0 relative flex flex-col items-center justify-center p-2 sm:p-4">
+                                                        <div className="w-full h-full relative">
                                                             <img
                                                                 alt={product.name}
-                                                                className="w-full h-full object-cover rounded-lg border border-slate-200/50"
+                                                                className="w-full h-full object-cover rounded-lg border border-slate-200/50 shadow-sm"
                                                                 src={product.image}
                                                             />
                                                         </div>
-                                                        <button
-                                                            onClick={(e) => handleStartConfig(e, product)}
-                                                            className="absolute bottom-0 inset-x-0 bg-red-600 text-white py-1.5 sm:py-2 text-[10px] sm:text-xs font-bold uppercase tracking-wide text-center hover:bg-red-700 transition-colors"
-                                                        >
-                                                            {configProductId === product.id ? 'Configurando...' : 'Ganhe pontos'}
-                                                        </button>
                                                     </div>
 
                                                     {/* Informações do Lado Direito */}
