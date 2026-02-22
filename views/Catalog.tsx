@@ -169,7 +169,7 @@ const Catalog: React.FC<CatalogProps> = ({
                                                     {/* Informações do Lado Direito */}
                                                     <div className="flex-1 p-3 sm:p-4 flex flex-col justify-between min-w-0">
                                                         <div>
-                                                            <h4 className="text-base sm:text-lg font-bold uppercase tracking-tight text-slate-800 line-clamp-2 leading-tight mb-1">{product.name}</h4>
+                                                            <h4 className="text-lg sm:text-xl font-bold uppercase tracking-tight text-slate-800 line-clamp-2 leading-tight mb-1">{product.name}</h4>
                                                             {product.description && product.description.trim() !== '' && (
                                                                 <p className="text-xs text-slate-500 line-clamp-2 leading-snug">
                                                                     {product.description}
